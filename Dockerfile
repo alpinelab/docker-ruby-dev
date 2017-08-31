@@ -26,7 +26,11 @@ RUN sed -i 's/^deb-src/# deb-src/' /etc/apt/sources.list \
  && rm -rf /var/lib/apt/lists/*
 
 # Install some global gems
-RUN gem install bundler foreman
+RUN gem update --system 2.6.13 \
+ && gem install \
+      bundler:1.15.4 \
+      foreman:0.84.0 \
+ && gem cleanup
 
 # Persist IRB/Pry/Rails console history
 ADD .irbrc .pryrc /root/
