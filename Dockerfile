@@ -23,6 +23,7 @@ RUN buildDependencies=' \
  && apt-get update \
  && apt-get install -y --no-install-recommends --no-install-suggests \
       ${buildDependencies} \
+      git \
       nodejs \
       postgresql-client \
  && gem update --system 2.6.13 \
