@@ -1,4 +1,4 @@
-FROM ruby:2.2.4-slim
+FROM ruby:2.2.4
 
 LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 
@@ -23,7 +23,6 @@ RUN buildDependencies=' \
  && apt-get update \
  && apt-get install -y --no-install-recommends --no-install-suggests \
       ${buildDependencies} \
-      git \
       nodejs \
       postgresql-client \
  && gem update --system 2.6.13 \
