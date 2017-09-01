@@ -21,6 +21,8 @@ RUN apt-get update \
  && apt-get install -y --no-install-recommends --no-install-suggests \
       nodejs \
       postgresql-client \
+      nano \
+      vim \
  && rm -rf /var/lib/apt/lists/*
 
 # Install GEM dependencies
