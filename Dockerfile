@@ -16,22 +16,18 @@ ENV PORT="5000" \
     GIT_COMMITTER_NAME="Just some fake name to be able to git-clone" \
     GIT_COMMITTER_EMAIL="whatever@this-user-is-not-supposed-to-git-push.anyway"
 
-# Install APT and GEM dependencies
-RUN buildDependencies=' \
-      build-essential \
-    ' \
- && apt-get update \
+# Install APT dependencies
+RUN apt-get update \
  && apt-get install -y --no-install-recommends --no-install-suggests \
-      ${buildDependencies} \
       nodejs \
       postgresql-client \
- && gem update --system 2.6.13 \
+ && rm -rf /var/lib/apt/lists/*
+
+# Install GEM dependencies
+RUN gem update --system 2.6.13 \
  && gem install \
       bundler:1.15.4 \
-      foreman:0.84.0 \
- && gem cleanup \
- && apt-get purge -y --auto-remove ${buildDependencies} \
- && rm -rf /var/lib/apt/lists/*
+      foreman:0.84.0
 
 # Persist IRB/Pry/Rails console history
 ADD .irbrc .pryrc /root/
