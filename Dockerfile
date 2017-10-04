@@ -17,13 +17,15 @@ ENV PORT="5000" \
     GIT_COMMITTER_EMAIL="whatever@this-user-is-not-supposed-to-git-push.anyway"
 
 # Install APT dependencies
-RUN apt-get update \
- && apt-get install -y --no-install-recommends --no-install-suggests \
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+    && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests \
       nodejs \
-      postgresql-client \
+      postgresql-client-9.5 \
       nano \
       vim \
- && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/*
 
 # Install GEM dependencies
 RUN gem update --system 2.6.13 \
