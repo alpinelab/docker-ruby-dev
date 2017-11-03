@@ -30,7 +30,7 @@ RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/
 # Install GEM dependencies
 RUN gem update --system 2.6.13 \
  && gem install \
-      bundler:1.15.4 \
+      bundler:1.16.0 \
       foreman:0.84.0
 
 # Persist IRB/Pry/Rails console history
