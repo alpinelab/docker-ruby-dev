@@ -13,17 +13,17 @@ With Docker Compose, simply create a `docker-compose.yml` file in your codebase 
 ```yaml
 version: "3"
 volumes:
-  app-bundle:       { driver: local }
-  app-node_modules: { driver: local }
-  app-config:       { driver: local }
+  your_app-bundle:       { driver: local }
+  your_app-node_modules: { driver: local }
+  your_app-config:       { driver: local }
 services:
-  app:
+  your_app:
     image: alpinelab/ruby-dev
     volumes:
       - ./:/app
-      - app-bundle:/bundle
-      - app-node_modules:/app/node_modules
-      - app-config:/config
+      - your_app-bundle:/bundle
+      - your_app-node_modules:/app/node_modules
+      - your_app-config:/config
 ```
 
 <details>
