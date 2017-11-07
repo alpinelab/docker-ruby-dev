@@ -15,24 +15,9 @@ This Docker image aims to provide a generic, easy, consistent and non-intrusive 
 
 ## Usage
 
-### With Docker Engine only
-
-Start your project from its codebase:
-```
-docker run -it -v $(pwd):/app alpinelab/ruby-dev
-```
-
-You can also add `-v $(basename $(pwd))-bundle:/bundle` to persist gems installed by Bundler.
-
-And/or `-v $(basename $(pwd))-node_modules:/app/node_modules` to persist JS packages installed by Yarn.
-
-And/or `-v $(basename $(pwd))-config:/config` to persist shell (Bash) and Ruby REPL histories.
-
-And/or `-v $(basename $(pwd))-sync:/app:nocopy` if you're on MacOS and already started `docker-sync` manually.
-
-As you see, it ends up in very long/complex command-lines just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: use Docker Compose (see immediately below).
-
 ### With Docker Compose (recommended)
+
+#### Setup
 
 With Docker Compose, simply create a `docker-compose.yml` file in your codebase root directory like this:
 
@@ -53,8 +38,8 @@ services:
 ```
 
 <details>
-  
-  <summary>If you're on MacOS, you'll very likely want to use [Docker Sync](http://docker-sync.io) too.</summary>
+
+  <summary>If you're on MacOS, you'll very likely want to use Docker Sync too.</summary>
 
   0. install it with `gem install docker-sync`
 
@@ -81,6 +66,8 @@ services:
 
 </details>
 
+#### Run
+
 You can now start your project with:
 
 ```shell
@@ -94,6 +81,23 @@ docker-compose run app rake
 ```
 
 > 💡 Note that you don't need to prefix commands with `bundle exec`.
+
+### With Docker Engine only
+
+Start your project from its codebase:
+```
+docker run -it -v $(pwd):/app alpinelab/ruby-dev
+```
+
+You can also add `-v $(basename $(pwd))-bundle:/bundle` to persist gems installed by Bundler.
+
+And/or `-v $(basename $(pwd))-node_modules:/app/node_modules` to persist JS packages installed by Yarn.
+
+And/or `-v $(basename $(pwd))-config:/config` to persist shell (Bash) and Ruby REPL histories.
+
+And/or `-v $(basename $(pwd))-sync:/app:nocopy` if you're on MacOS and already started `docker-sync` manually.
+
+As you can see, you will quickly end up with very long and complex commands just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: use Docker Compose (see above).
 
 ## Features
 
