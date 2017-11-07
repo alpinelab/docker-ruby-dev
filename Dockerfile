@@ -45,7 +45,7 @@ RUN gem install \
       foreman:${FOREMAN_VERSION}
 
 # Add dot files to home directory (to persist IRB/Pry/Rails console history, to configure Yarn, etc…)
-COPY home/* /root/
+COPY dotfiles/* /root/
 
 # Configure the main working directory.
 WORKDIR /app
