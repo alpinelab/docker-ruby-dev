@@ -37,7 +37,7 @@ fi
 pushd "${THIS_SCRIPT_PATH}"
   version="$1"
   alias="${2:-}"
-  echo "The following branch(es) and tag(s) will be created for Ruby ${version}:"
+  echo "The following branch(es) will be created for Ruby ${version}:"
   echo "  ruby-${version}"
   [[ -n ${alias} ]] && echo "  ruby-${alias}"
   echo -ne "Press ${c_gray}ENTER${c_reset} to continue or ${c_gray}Ctrl+C${c_reset} to cancel"
@@ -47,18 +47,17 @@ pushd "${THIS_SCRIPT_PATH}"
   git checkout -q latest
   git pull -q origin latest
 
-  info "Creating version branch and tag"
+  info "Creating version branch"
   git checkout -q -b "ruby-${version}"
   sed ${SED_I_OPTION} "1 s/^FROM ruby:.*\$/FROM ruby:${version}/" Dockerfile
   git commit -q Dockerfile -m "Change Ruby version to ${version}"
-  git tag -a "ruby-${version}" -m "For Ruby ${version}"
-  git push -q -u origin "refs/heads/ruby-${version}" --tags
+  git push -q -u origin "ruby-${version}"
 
   if [[ -n ${alias} ]]; then
     git checkout -q latest
     if git rev-parse -q --verify "ruby-${alias}" > /dev/null; then
       previous_version=$( \
-        git checkout -q "refs/heads/ruby-${alias}" ;\
+        git checkout -q "ruby-${alias}" ;\
         sed -n 's/^FROM ruby:\(.*\)/\1/p' Dockerfile ;\
         git checkout -q -
       )
@@ -66,12 +65,11 @@ pushd "${THIS_SCRIPT_PATH}"
       echo -ne "Press ${c_gray}ENTER${c_reset} to ${c_red}overwrite${c_reset} it or ${c_gray}Ctrl+C${c_reset} to cancel"
       read
     fi
-    info "Creating alias branch and tag"
-    git checkout -q -B "refs/heads/ruby-${alias}"
+    info "Creating alias branch"
+    git checkout -q -B "ruby-${alias}"
     sed ${SED_I_OPTION} "1 s/^FROM ruby:.*\$/FROM ruby:${version}/" Dockerfile
     git commit -q Dockerfile -m "Change Ruby version to ${version}"
-    git tag -f -a "ruby-${alias}" -m "For Ruby ${alias} (${version}, exactly)"
-    git push -q -f -u origin "refs/heads/ruby-${alias}" --tags
+    git push -q -f -u origin "ruby-${alias}"
   fi
 
   git checkout -q latest
