@@ -30,6 +30,8 @@ services:
 
   <summary>If you're on MacOS, you'll very likely want to use Docker Sync too.</summary>
 
+  > ⚠️ Use your **actual** application name suffixed with `-sync` instead of `your_app-sync` to prevent conflicts between your projects.
+
   0. install it with `gem install docker-sync`
 
   1. add a `docker-sync.yml` file:
@@ -37,7 +39,7 @@ services:
       ```yaml
       version: "2"
       syncs:
-        app-sync:
+        your_app-sync:
           src: ./
           sync_excludes: [log, tmp, .git, .bundle, .idea, node_modules]
       ```
@@ -46,10 +48,10 @@ services:
 
       ```yaml
       volumes:
-        app-sync: { external: true }
+        your_app-sync: { external: true }
       ```
 
-  3. use it in `docker-compose.yml` by replacing `- ./:/app` by `- app-sync:/app:nocopy` in the `app` service
+  3. use it by replacing `- ./:/app` with `- your_app-sync:/app:nocopy` in `docker-compose.yml`
 
   4. start the sync with `docker-sync start`
 
