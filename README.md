@@ -1,6 +1,6 @@
 # `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-This Docker image provides a generic, easy, consistent and non-intrusive configuration experience for all your Ruby projects.
+This image provides a generic, easy, consistent and non-intrusive Docker setup for all your Ruby projects.
 
 ## Usage
 
