@@ -1,19 +1,21 @@
-# docker-ruby-dev
+# `alpinelab/ruby-dev`: opinionated Docker setup for Ruby development :whale:
 
-Ruby development with Docker made easy :whale:
+[![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
+[![Docker Automated build](https://img.shields.io/docker/automated/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-This Docker image is an opinionated Docker setup for Ruby development.
-It aims to provide an easy but consistent configuration experience for your Ruby projects.
+This Docker image aims to provide a generic, easy, consistent and non-intrusive configuration experience for your Ruby projects.
 
 ## Goals
 
 * use the same Docker image in all projects
 * stop messing your host environment with multiple rubies and gemsets
 * stop building your Docker image every time you change your `Gemfile` (or worse: your code :scream:)
+* use up-to-date Ruby, Bundler, Node and Yarn versions
 
 ## Usage
 
-### with Docker Engine
+### With Docker Engine only
 
 Start your project from its codebase:
 ```
@@ -30,9 +32,9 @@ And/or `-v $(basename $(pwd))-sync:/app:nocopy` if you're on MacOS and already s
 
 As you see, it ends up in very long/complex command-lines just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: use Docker Compose (see immediately below).
 
-### with Docker Compose (recommended)
+### With Docker Compose (recommended)
 
-With Docker Compose (recommended to persist history, dependencies, etc… without super long command lines), create a `docker-compose.yml` file in your codebase root directory like this:
+With Docker Compose, simply create a `docker-compose.yml` file in your codebase root directory like this:
 
 ```yaml
 version: "3"
@@ -71,17 +73,17 @@ If you're on MacOS, you'll very likely want to use [Docker Sync](http://docker-s
       app-sync: { external: true }
     ```
 
-3. use it in the `app` service by replacing `- ./:/app` by `- app-sync:/app:nocopy`
+3. use it in `docker-compose.yml` by replacing `- ./:/app` by `- app-sync:/app:nocopy` in the `app` service
 
-4. start it with `docker-sync start`
+4. start the sync with `docker-sync start`
 
-You can finally start your project with:
+You can now start your project with:
 
 ```shell
 docker-compose up
 ```
 
-Or run any command like `rake` with:
+Or run any command (like `rake`) with:
 
 ```shell
 docker-compose run app rake
