@@ -142,3 +142,9 @@ apt-get update && apt-get install <your_package>
 ```
 
 > ⚠️ This will probably **not be persisted** (because it will likely be installed in this container instance a UnionFS layer that will be discarded when you exit it).
+
+### Contributing
+
+Contributions are indeed warmly welcome as pull requests, issues or simple feedback.
+
+There's also a handy `add-ruby-version-support.sh` script to add support for a Ruby version.
