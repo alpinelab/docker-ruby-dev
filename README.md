@@ -1,4 +1,4 @@
-# `alpinelab/ruby-dev`: opinionated Docker setup for Ruby development :whale:
+# `alpinelab/ruby-dev`
 
 [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
@@ -52,30 +52,34 @@ services:
       - app-config:/config
 ```
 
-If you're on MacOS, you'll very likely want to use [Docker Sync](http://docker-sync.io) too:
+<details>
+  
+  <summary>If you're on MacOS, you'll very likely want to use [Docker Sync](http://docker-sync.io) too.</summary>
 
-0. install it with `gem install docker-sync`
+  0. install it with `gem install docker-sync`
 
-1. add a `docker-sync.yml` file:
+  1. add a `docker-sync.yml` file:
 
-    ```yaml
-    version: "2"
-    syncs:
-      app-sync:
-        src: ./
-        sync_excludes: [log, tmp, .git, .bundle, .idea, node_modules]
-    ```
+      ```yaml
+      version: "2"
+      syncs:
+        app-sync:
+          src: ./
+          sync_excludes: [log, tmp, .git, .bundle, .idea, node_modules]
+      ```
 
-2. add the sync container as external container in `docker-compose.yml`:
+  2. add the sync container as external container in `docker-compose.yml`:
 
-    ```yaml
-    volumes:
-      app-sync: { external: true }
-    ```
+      ```yaml
+      volumes:
+        app-sync: { external: true }
+      ```
 
-3. use it in `docker-compose.yml` by replacing `- ./:/app` by `- app-sync:/app:nocopy` in the `app` service
+  3. use it in `docker-compose.yml` by replacing `- ./:/app` by `- app-sync:/app:nocopy` in the `app` service
 
-4. start the sync with `docker-sync start`
+  4. start the sync with `docker-sync start`
+
+</details>
 
 You can now start your project with:
 
