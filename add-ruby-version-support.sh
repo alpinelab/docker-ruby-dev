@@ -10,9 +10,9 @@ popd  () { command popd  "$@" > /dev/null ; }
 
 pushd "${HERE}"
   version="$@"
-  git checkout -q latest
-  git pull -q origin latest
-  git checkout -q -b "ruby-${version}"
+  git checkout latest
+  git pull origin latest
+  git checkout -b "ruby-${version}"
   sed ${SED_I_OPTION} "1 s/^FROM ruby:.*\$/FROM ruby:${version}/" Dockerfile
   git commit Dockerfile -m "Change Ruby version to ${version}"
   git tag -a "ruby-${version}" -m "For Ruby ${version}"
