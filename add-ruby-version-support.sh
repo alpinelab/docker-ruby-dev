@@ -15,5 +15,6 @@ pushd "${HERE}"
   git checkout -q -b "ruby-${version}"
   sed ${SED_I_OPTION} "1 s/^FROM ruby:.*\$/FROM ruby:${version}/" Dockerfile
   git commit Dockerfile -m "Change Ruby version to ${version}"
-  git push -u origin "ruby-${version}"
+  git tag -a "ruby-${version}" -m "For Ruby ${version}"
+  git push -u origin "ruby-${version}" --tags
 popd
