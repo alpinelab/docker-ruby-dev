@@ -1,17 +1,6 @@
-# `alpinelab/ruby-dev`
+# `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-[![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
-[![Docker Automated build](https://img.shields.io/docker/automated/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
-
-This Docker image aims to provide a generic, easy, consistent and non-intrusive configuration experience for your Ruby projects.
-
-## Goals
-
-* use the same Docker image in all projects
-* stop messing your host environment with multiple rubies and gemsets
-* stop building your Docker image every time you change your `Gemfile` (or worse: your code :scream:)
-* use up-to-date Ruby, Bundler, Node and Yarn versions
+This Docker image provides a generic, easy, consistent and non-intrusive configuration experience for all your Ruby projects.
 
 ## Usage
 
@@ -99,26 +88,35 @@ And/or `-v $(basename $(pwd))-sync:/app:nocopy` if you're on MacOS and already s
 
 As you can see, you will quickly end up with very long and complex commands just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: use Docker Compose (see above).
 
-## Features
+## About
+
+### Goals
+
+* use the same Docker image in all projects
+* stop messing your host environment with multiple rubies and gemsets
+* stop building your Docker image every time you change your `Gemfile` (or worse: your code :scream:)
+* use up-to-date Ruby, Bundler, Node and Yarn versions
+
+### Features
 
 * shell history
 * IRB/Pry history
-* auto-maintain Ruby (Bundler) & JS (npm) dependencies
-* basic in-container tools
+* auto-install Ruby (Bundler) and Javascript (NPM) dependencies
+* basic in-container tools (`vim`, `nano`, …)
 
-## Conventions
+### Conventions
 
 Filesystem conventions:
 * `/app` holds your application source code
-* `/app/node_modules` holds NPM/Yarn packages
-* `/bundle` holds Bundler data
+* `/app/node_modules` holds packages installed by Yarn
+* `/bundle` holds gems installed by Bundler
 * `/config` holds miscellaneous configuration files
 
 Dependencies conventions:
 * `bundle install` is run before any command if necessary
 * `yarn install` is run before any command if necessary
 
-## Configurations
+### Customisation
 
 ### Custom Yarn check command
 
