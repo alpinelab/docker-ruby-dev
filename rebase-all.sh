@@ -19,4 +19,6 @@ pushd "${THIS_SCRIPT_PATH}"
     GIT_EDITOR=true git rebase -q latest
     git push -q -f origin ${branch}
   done
+
+  git checkout -q latest
 popd
