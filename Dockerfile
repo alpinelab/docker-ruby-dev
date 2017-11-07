@@ -1,10 +1,15 @@
-FROM ruby:2.2.4
+FROM ruby:2.4.2
 
 LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 
 # Explicitely define locale
 # as advised in https://github.com/docker-library/docs/blob/master/ruby/content.md#encoding
 ENV LANG="C.UTF-8"
+
+# Define some build variables
+ENV NODEJS_VERSION="8.9.0" \
+    YARN_VERSION="1.3.2" \
+    FOREMAN_VERSION="0.84.0"
 
 # Define some default variables
 ENV PORT="5000" \
@@ -17,24 +22,30 @@ ENV PORT="5000" \
     GIT_COMMITTER_EMAIL="whatever@this-user-is-not-supposed-to-git-push.anyway"
 
 # Install APT dependencies
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
- && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+RUN apt-get update \
+ && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+      apt-transport-https \
+ && echo "deb https://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
+ && curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
+ && echo 'deb https://deb.nodesource.com/node_8.x jessie main' > /etc/apt/sources.list.d/nodesource.list \
+ && curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
+ && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
+ && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
  && apt-get update \
- && apt-get install -y --no-install-recommends --no-install-suggests \
-      nodejs \
-      postgresql-client-9.5 \
+ && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       nano \
+      nodejs=${NODEJS_VERSION}-1nodesource1 \
+      postgresql-client-10 \
       vim \
+      yarn=${YARN_VERSION}-1 \
  && rm -rf /var/lib/apt/lists/*
 
 # Install GEM dependencies
-RUN gem update --system 2.6.13 \
- && gem install \
-      bundler:1.16.0 \
-      foreman:0.84.0
+RUN gem install \
+      foreman:${FOREMAN_VERSION}
 
-# Persist IRB/Pry/Rails console history
-ADD .irbrc .pryrc /root/
+# Add dot files to home directory (to persist IRB/Pry/Rails console history, to configure Yarn, etc…)
+COPY home/* /root/
 
 # Configure the main working directory.
 WORKDIR /app
@@ -42,9 +53,9 @@ WORKDIR /app
 # Expose listening port to the Docker host, so we can access it from the outside.
 EXPOSE ${PORT}
 
-# Use a bundle wrapper as entrypoint which runs `bundle install` if necessary.
-COPY bundler-wrapper /usr/local/bin/
-ENTRYPOINT ["bundler-wrapper"]
+# Use wrappers that check and maintain Ruby & JS dependencies (if necessary) as entrypoint
+COPY bin/* /usr/local/bin/
+ENTRYPOINT ["bundler-wrapper", "yarn-wrapper"]
 
-# The main command to run when the container starts.
+# The main command to run when the container starts is to start whatever the Procfile defines
 CMD ["foreman", "start"]

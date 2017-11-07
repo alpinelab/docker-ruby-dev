@@ -1,3 +1,3 @@
 require "irb/ext/save-history"
 IRB.conf[:SAVE_HISTORY] = 1000
-IRB.conf[:HISTORY_FILE] = "/config/.irb-history"
+IRB.conf[:HISTORY_FILE] = "/config/.ruby-history"

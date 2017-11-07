@@ -1,0 +1,21 @@
+#!/bin/bash
+
+if [ -f package.json ]; then
+  check_command=$( \
+    yarn run 2> /dev/null | grep -qx '^\s\+-\s\+check$' \
+      && echo "yarn run --silent check" \
+      || echo "yarn check --integrity --verify-tree --silent" \
+  )
+  echo -n "Checking JS modules... "
+  if eval ${check_command} 2> /dev/null; then
+    echo "all good 👌"
+  else
+    echo "something is missing 💥"
+    echo "Updating JS modules now…"
+    yarn install --check-files --frozen-lockfiles
+  fi
+else
+  echo "No package.json found. Skipping JS dependencies check."
+fi
+
+exec "$@"

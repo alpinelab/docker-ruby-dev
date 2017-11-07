@@ -1,0 +1,16 @@
+#!/bin/bash
+
+if [ -f Gemfile ]; then
+  echo -n "Checking bundle... "
+  if $(bundle check &> /dev/null); then
+    echo "All good 👌"
+  else
+    echo "Something is missing 💥"
+    echo "Updating bundle now…"
+    bundle install --jobs 20 --retry 5 --clean
+  fi
+else
+  echo "No Gemfile found. Skipping Ruby dependencies check."
+fi
+
+exec "$@"
