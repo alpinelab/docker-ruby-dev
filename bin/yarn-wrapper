@@ -12,7 +12,7 @@ if [ -f package.json ]; then
   else
     echo "something is missing 💥"
     echo "Updating JS modules now…"
-    yarn install --check-files --frozen-lockfiles
+    yarn install --check-files --frozen-lockfile
   fi
 else
   echo "No package.json found. Skipping JS dependencies check."
