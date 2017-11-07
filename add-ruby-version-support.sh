@@ -51,8 +51,8 @@ pushd "${THIS_SCRIPT_PATH}"
   git checkout -q -b "ruby-${version}"
   sed ${SED_I_OPTION} "1 s/^FROM ruby:.*\$/FROM ruby:${version}/" Dockerfile
   git commit -q Dockerfile -m "Change Ruby version to ${version}"
-  git tag -q -a "ruby-${version}" -m "For Ruby ${version}"
-  git push -q -u origin "ruby-${version}" --tags
+  git tag -a "ruby-${version}" -m "For Ruby ${version}"
+  git push -q -u origin "refs/heads/ruby-${version}" --tags
 
   if [[ -n ${alias} ]]; then
     git checkout -q latest
@@ -67,12 +67,14 @@ pushd "${THIS_SCRIPT_PATH}"
       read
     fi
     info "Creating alias branch and tag"
-    git checkout -q -B "ruby-${alias}"
+    git checkout -q -B "refs/heads/ruby-${alias}"
     sed ${SED_I_OPTION} "1 s/^FROM ruby:.*\$/FROM ruby:${version}/" Dockerfile
     git commit -q Dockerfile -m "Change Ruby version to ${version}"
-    git tag -q -a "ruby-${alias}" -m "For Ruby ${alias} (${version}, exactly)"
-    git push -q -u origin "ruby-${alias}" --tags
+    git tag -f -a "ruby-${alias}" -m "For Ruby ${alias} (${version}, exactly)"
+    git push -q -f -u origin "refs/heads/ruby-${alias}" --tags
   fi
+
+  git checkout -q latest
 popd
 
 success "Support for Ruby ${version} added 👍"
