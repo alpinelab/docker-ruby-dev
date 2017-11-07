@@ -1,6 +1,6 @@
 # `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-This image provides a generic, easy, consistent and non-intrusive Docker setup for all your Ruby projects.
+This image provides an easy, generic, consistent and non-intrusive Docker setup for all your Ruby projects. [Why?](#about)
 
 ## Usage
 
@@ -118,11 +118,20 @@ Dependencies conventions:
 
 ### Customisation
 
-### Custom Yarn check command
+#### Custom Yarn check command
 
-By default, we use `yarn check --integrity --verify-tree --silent` to check that all JS dependencies are met, but you can override this if you need to by defining your own `check` command in the `scripts` section of `package.json`.
+By default, we use `yarn check --integrity --verify-tree --silent` to check that all JS dependencies are met, but you can override this if you need to by defining your own `check` command in the `scripts` section of `package.json`, like:
 
-### Installing software in the container
+```json
+{
+  "scripts": {
+    "check": "cd client && yarn check --integrity --verify-tree --silent"
+  }
+}
+```
+
+
+#### Installing software in the container
 
 To temporarily install a package inside the container (_e.g._ for a one-time debugging session), you can simply run:
 
