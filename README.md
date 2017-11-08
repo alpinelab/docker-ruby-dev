@@ -26,6 +26,8 @@ services:
       - your_app-config:/config
 ```
 
+> :bulb: Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support multiple Ruby versions [via image tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
+
 <details>
 
   <summary>If you're on MacOS, you'll very likely want to use Docker Sync too.</summary>
