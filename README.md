@@ -107,6 +107,7 @@ As you can see, you will quickly end up with very long and complex commands just
 * IRB/Pry history
 * auto-install Ruby (Bundler) and Javascript (NPM) dependencies
 * basic in-container tools (`vim`, `nano`, …)
+* runs whatever you define in the `Procfile`
 
 ### Conventions
 
@@ -119,6 +120,9 @@ Filesystem conventions:
 Dependencies conventions:
 * `bundle install` is run before any command if necessary
 * `yarn install` is run before any command if necessary
+
+Other conventions:
+* the default command run by the image is `foreman start`
 
 ### Customisation
 
