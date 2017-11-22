@@ -13,17 +13,17 @@ With Docker Compose, simply create a `docker-compose.yml` file in your codebase 
 ```yaml
 version: "3"
 volumes:
-  your_app-bundle:       { driver: local }
-  your_app-node_modules: { driver: local }
-  your_app-config:       { driver: local }
+  bundle:       { driver: local }
+  node_modules: { driver: local }
+  config:       { driver: local }
 services:
-  your_app:
+  app:
     image: alpinelab/ruby-dev
     volumes:
       - ./:/app
-      - your_app-bundle:/bundle
-      - your_app-node_modules:/app/node_modules
-      - your_app-config:/config
+      - bundle:/bundle
+      - node_modules:/app/node_modules
+      - config:/config
 ```
 
 > :bulb: Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support multiple Ruby versions [via image tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
