@@ -134,16 +134,32 @@ By default, we use `yarn check --integrity --verify-tree --silent` to check that
 }
 ```
 
-
 #### Installing software in the container
 
-To temporarily install a package inside the container (_e.g._ for a one-time debugging session), you can simply run:
+To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply run:
 
 ```shell
 apt-get update && apt-get install <your_package>
 ```
 
 > ⚠️ This will probably **not be persisted** (because it will likely be installed in this container instance a UnionFS layer that will be discarded when you exit it).
+
+To **permanently** install packages inside a container, you'll need to create a new Docker image based on this very one (or any of its tags). For example, to add packages needed to compile [Thoughtbot](https://thoughtbot.com)'s [`capybara-webkit`](https://github.com/thoughtbot/capybara-webkit) gem native extensions, create the following `Dockerfile` in your project root folder (it's this image, but with some extra packages installed by `apt-get` on top of it):
+
+```
+FROM alpinelab/ruby-dev
+
+RUN apt-get update \
+ && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+      qt5-default \
+      libqt5webkit5-dev \
+      gstreamer1.0-plugins-base \
+      gstreamer1.0-tools \
+      gstreamer1.0-x \
+ && rm -rf /var/lib/apt/lists/*
+```
+
+Then, change your `docker-compose.yml` to use it (and to build it on-demand) by changing `image: alpinelab/ruby-dev` to `build: .`.
 
 ### Contributing
 
