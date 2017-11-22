@@ -67,10 +67,10 @@ You can now start your project with:
 docker-compose up
 ```
 
-Or run any command (like `rake`) with:
+Or run any command (like `rake`, `bash`, or whatever else) with:
 
 ```shell
-docker-compose run app rake
+docker-compose run app [rake|bash|...]
 ```
 
 > 💡 Note that you don't need to prefix commands with `bundle exec`.
