@@ -90,7 +90,7 @@ And/or `-v $(basename $(pwd))-config:/config` to persist shell (Bash) and Ruby R
 
 And/or `-v $(basename $(pwd))-sync:/app:nocopy` if you're on MacOS and already started `docker-sync` manually.
 
-As you can see, you will quickly end up with very long and complex commands just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: use Docker Compose (see above).
+As you can see, you will quickly end up with very long and complex commands just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: [use Docker Compose](#with-docker-compose-recommended).
 
 ## About
 
