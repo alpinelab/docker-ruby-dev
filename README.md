@@ -1,14 +1,12 @@
 # `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-This image provides an easy, generic, consistent and non-intrusive Docker setup for all your Ruby projects. [Why?](#about)
+This image provides an easy, generic, consistent and non-intrusive Docker Compose setup for all your Ruby projects. [Why?](#about)
 
 ## Usage
 
-### With Docker Compose (recommended)
+### Setup
 
-#### Setup
-
-With Docker Compose, simply create a `docker-compose.yml` file in your codebase root directory like this:
+Simply create a `docker-compose.yml` file in your project root directory like this:
 
 ```yaml
 version: "3"
@@ -59,7 +57,7 @@ services:
 
 </details>
 
-#### Run
+### Run
 
 You can now start your project with:
 
@@ -75,28 +73,11 @@ docker-compose run app [rake|bash|...]
 
 > 💡 Note that you don't need to prefix commands with `bundle exec`.
 
-### With Docker Engine only
-
-Start your project from its codebase:
-```
-docker run -it -v $(pwd):/app alpinelab/ruby-dev
-```
-
-You can also add `-v $(basename $(pwd))-bundle:/bundle` to persist gems installed by Bundler.
-
-And/or `-v $(basename $(pwd))-node_modules:/app/node_modules` to persist JS packages installed by Yarn.
-
-And/or `-v $(basename $(pwd))-config:/config` to persist shell (Bash) and Ruby REPL histories.
-
-And/or `-v $(basename $(pwd))-sync:/app:nocopy` if you're on MacOS and already started `docker-sync` manually.
-
-As you can see, you will quickly end up with very long and complex commands just to start your app (or run `rake` 😕). That's why we recommend to either create an alias for this, or even better: [use Docker Compose](#with-docker-compose-recommended).
-
 ## About
 
 ### Goals
 
-* use the same Docker image in all projects
+* use the same Docker image in all your projects
 * stop messing your host environment with multiple rubies and gemsets
 * stop building your Docker image every time you change your `Gemfile` (or worse: your code :scream:)
 * use up-to-date Ruby, Bundler, Node and Yarn versions
@@ -106,9 +87,8 @@ As you can see, you will quickly end up with very long and complex commands just
 * shell history
 * IRB/Pry history
 * auto-install Ruby (Bundler) and Javascript (NPM) dependencies
-* basic in-container tools (`vim`, `nano`, …)
+* basic in-container tools (`vim`, `nano`, `heroku`, …)
 * runs whatever you define in the `Procfile`
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) is available inside the container
 
 ### Conventions
 
@@ -125,13 +105,11 @@ Dependencies conventions:
 Other conventions:
 * the default command run by the image is `foreman start`
 
-### Configuration
+## Configuration
 
 Most configurations can be done from a `docker-compose.override.yml` file alongside your `docker-compose.yml` file (by default, it will be [automatically read](https://docs.docker.com/compose/extends/#multiple-compose-files) by `docker-compose`, and it should probably be [gitignore'd globally](https://help.github.com/articles/ignoring-files/#create-a-global-gitignore)).
 
-If you are using this image with Docker Engine only, you will need to find the [corresponding Docker CLI options](https://docs.docker.com/engine/reference/commandline/cli/) (`-v` for volumes, `-e` for environment variables, …).
-
-#### Heroku CLI authentication
+### Heroku CLI authentication
 
 The recommended approach to have the Heroku CLI authenticated is to set the `HEROKU_API_KEY` in `docker-compose.override.yml` with an OAuth token:
 
@@ -151,7 +129,7 @@ heroku authorizations:create --output-format short --description "Docker [alpine
 
 An alternative but less secure approach would be to mount your host's `~/.netrc` to the container's `/root/.netrc`.
 
-#### Git authentication
+### Git authentication
 
 If you're using SSH as underlying Git protocol, you may want to use your host SSH authentication from within the container (to use `git` from there, for example).
 
@@ -165,9 +143,9 @@ services:
       - ~/.ssh:/root/.ssh
 ```
 
-### Customisation
+## Customisation
 
-#### Custom Yarn check command
+### Custom Yarn check command
 
 By default, we use `yarn check --integrity --verify-tree --silent` to check that all JS dependencies are met, but you can override this if you need to by defining your own `check` command in the `scripts` section of `package.json`, like:
 
@@ -179,7 +157,7 @@ By default, we use `yarn check --integrity --verify-tree --silent` to check that
 }
 ```
 
-#### Installing software in the container
+### Installing software in the container
 
 To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply run:
 
@@ -189,9 +167,9 @@ apt-get update && apt-get install <your_package>
 
 > ⚠️ This will probably **not be persisted** (because it will likely be installed in this container instance a UnionFS layer that will be discarded when you exit it).
 
-To **permanently** install packages inside a container, you'll need to create a new Docker image based on this very one (or any of its tags). For example, to add packages needed to compile [Thoughtbot](https://thoughtbot.com)'s [`capybara-webkit`](https://github.com/thoughtbot/capybara-webkit) gem native extensions, create the following `Dockerfile` in your project root folder (it's this image, but with some extra packages installed by `apt-get` on top of it):
+To **permanently** install packages inside a container, you'll need to create a new Docker image based on this very one (or any of its tags). For example, to add packages needed to compile [Thoughtbot](https://thoughtbot.com)'s [`capybara-webkit`](https://github.com/thoughtbot/capybara-webkit) gem native extensions, create the following `Dockerfile` in your project root folder (it will build an image based on this one but with some extra packages installed by `apt-get` on top of it):
 
-```
+```Dockerfile
 FROM alpinelab/ruby-dev
 
 RUN apt-get update \
@@ -206,8 +184,8 @@ RUN apt-get update \
 
 Then, change your `docker-compose.yml` to use it (and to build it on-demand) by changing `image: alpinelab/ruby-dev` to `build: .`.
 
-### Contributing
+## Contributing
 
-Contributions are indeed warmly welcome as pull requests, issues or simple feedback.
+Contributions are indeed warmly welcome as [pull requests](https://github.com/alpinelab/docker-ruby-dev/pulls), or [issues](https://github.com/alpinelab/docker-ruby-dev/issues).
 
-There's also a handy `add-ruby-version-support.sh` script to add support for a Ruby version.
+There's also a handy [`add-ruby-version-support.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/add-ruby-version-support.sh) script to add support for a Ruby version and another handy [`rebase-all.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/rebase-all.sh) script to apply a change made on `latest` branch to all other branches.
