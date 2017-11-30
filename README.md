@@ -108,6 +108,7 @@ As you can see, you will quickly end up with very long and complex commands just
 * auto-install Ruby (Bundler) and Javascript (NPM) dependencies
 * basic in-container tools (`vim`, `nano`, …)
 * runs whatever you define in the `Procfile`
+* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) is available inside the container
 
 ### Conventions
 
@@ -123,6 +124,46 @@ Dependencies conventions:
 
 Other conventions:
 * the default command run by the image is `foreman start`
+
+### Configuration
+
+Most configurations can be done from a `docker-compose.override.yml` file alongside your `docker-compose.yml` file (by default, it will be [automatically read](https://docs.docker.com/compose/extends/#multiple-compose-files) by `docker-compose`, and it should probably be [gitignore'd globally](https://help.github.com/articles/ignoring-files/#create-a-global-gitignore)).
+
+If you are using this image with Docker Engine only, you will need to find the [corresponding Docker CLI options](https://docs.docker.com/engine/reference/commandline/cli/) (`-v` for volumes, `-e` for environment variables, …).
+
+#### Heroku CLI authentication
+
+The recommended approach to have the Heroku CLI authenticated is to set the `HEROKU_API_KEY` in `docker-compose.override.yml` with an OAuth token:
+
+```yaml
+version: "3"
+services:
+  app:
+    environment:
+      HEROKU_API_KEY: 12345-67890-abcdef
+```
+
+If you don't have an [OAuth token](https://github.com/heroku/heroku-cli-oauth#authorizations) yet, you can create and output one with:
+
+```shell
+heroku authorizations:create --output-format short --description "Docker [alpinelab/ruby-dev]"
+```
+
+An alternative but less secure approach would be to mount your host's `~/.netrc` to the container's `/root/.netrc`.
+
+#### Git authentication
+
+If you're using SSH as underlying Git protocol, you may want to use your host SSH authentication from within the container (to use `git` from there, for example).
+
+You can do it by mounting your host's `~/.ssh` to the container's `/root/.ssh` from `docker-compose.override.yml`:
+
+```yaml
+version: "3"
+services:
+  app:
+    volumes:
+      - ~/.ssh:/root/.ssh
+```
 
 ### Customisation
 

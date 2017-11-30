@@ -31,8 +31,11 @@ RUN apt-get update \
  && curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+ && echo "deb https://cli-assets.heroku.com/branches/stable/apt ./" > /etc/apt/sources.list.d/heroku.list \
+ && curl -sS https://cli-assets.heroku.com/apt/release.key | apt-key add - \
  && apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+      heroku \
       nano \
       nodejs=${NODEJS_VERSION}-1nodesource1 \
       postgresql-client-10 \
