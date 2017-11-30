@@ -9,15 +9,24 @@ pushd () { command pushd "$@" > /dev/null ; }
 popd  () { command popd  "$@" > /dev/null ; }
 
 pushd "${THIS_SCRIPT_PATH}"
-  git checkout -q latest
-  git pull -q origin latest
+  # Make sure all remote branches are tracked
+  git branch --remotes | grep -v '\->' | while read remote; do
+    branch="${remote#origin/}"
+    git rev-parse --quiet --verify "${branch}" > /dev/null \
+      && git branch --quiet --set-upstream-to="${remote}" "${branch}" \
+      || git branch --quiet --track "${branch}" "${remote}"
+  done
 
+  # Update all branches
+  git pull --all --quiet
+
+  # Rebase each branch on `latest`
   for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/ | grep -v '^latest$'); do
     echo "Rebasing branch ${branch}"
-    git checkout -q ${branch}
-    git pull -q origin ${branch}
-    GIT_EDITOR=true git rebase -q latest
-    git push -q -f origin ${branch}
+    git checkout --quiet ${branch}
+    git pull --quiet origin ${branch}
+    GIT_EDITOR=true git rebase --quiet latest
+    git push --quiet --force origin ${branch}
   done
 
   git checkout -q latest
