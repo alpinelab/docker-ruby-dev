@@ -1,4 +1,4 @@
-FROM ruby:2.4.2
+FROM ruby:2.5
 
 LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 
@@ -44,7 +44,8 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Install GEM dependencies
-RUN gem install \
+RUN gem update --system \
+ && gem install \
       foreman:${FOREMAN_VERSION}
 
 # Add dot files to home directory (to persist IRB/Pry/Rails console history, to configure Yarn, etc…)
