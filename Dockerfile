@@ -7,7 +7,7 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define some build variables
-ENV NODEJS_VERSION="8.9.1" \
+ENV NODEJS_VERSION="8.9.4" \
     YARN_VERSION="1.3.2" \
     FOREMAN_VERSION="0.84.0"
 
