@@ -6,10 +6,17 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 # as advised in https://github.com/docker-library/docs/blob/master/ruby/content.md#encoding
 ENV LANG="C.UTF-8"
 
-# Define some build variables
-ENV NODEJS_VERSION="8.9.4" \
+# Define dependencies base versions
+ARG NODEJS_VERSION="8.9.4" \
     YARN_VERSION="1.3.2" \
-    FOREMAN_VERSION="0.84.0"
+    FOREMAN_VERSION="0.84.0" \
+    HEROKU_CLI_VERSION="6.15.25" \
+    RUBYGEMS_VERSION="2.7.5"
+
+# Define dependencies package-manager versions
+ARG NODEJS_APT_VERSION="${NODEJS_VERSION}-1nodesource1" \
+    YARN_APT_VERSION="${YARN_VERSION}-1" \
+    HEROKU_CLI_APT_VERSION="${HEROKU_CLI_VERSION}-1"
 
 # Define some default variables
 ENV PORT="5000" \
@@ -35,16 +42,16 @@ RUN apt-get update \
  && curl -sS https://cli-assets.heroku.com/apt/release.key | apt-key add - \
  && apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
-      heroku \
+      heroku=${HEROKU_CLI_APT_VERSION} \
       nano \
-      nodejs=${NODEJS_VERSION}-1nodesource1 \
+      nodejs=${NODEJS_APT_VERSION} \
       postgresql-client-10 \
       vim \
-      yarn=${YARN_VERSION}-1 \
+      yarn=${YARN_APT_VERSION} \
  && rm -rf /var/lib/apt/lists/*
 
 # Install GEM dependencies
-RUN gem update --system \
+RUN gem update --system ${RUBYGEMS_VERSION} \
  && gem install \
       foreman:${FOREMAN_VERSION}
 
