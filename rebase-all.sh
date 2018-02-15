@@ -25,7 +25,7 @@ pushd "${THIS_SCRIPT_PATH}"
     echo "Rebasing branch ${branch}"
     git checkout --quiet ${branch}
     git pull --quiet origin ${branch}
-    GIT_EDITOR=true git rebase --quiet latest
+    GIT_EDITOR=true git rebase --quiet --strategy=recursive --strategy-option=theirs latest
     git push --quiet --force origin ${branch}
   done
 
