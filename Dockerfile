@@ -11,7 +11,7 @@ ENV NODEJS_VERSION="8.9.4" \
     YARN_VERSION="1.3.2" \
     FOREMAN_VERSION="0.84.0" \
     HEROKU_CLI_VERSION="6.15.25" \
-    RUBYGEMS_VERSION="2.7.5"
+    RUBYGEMS_VERSION="2.7.6"
 
 # Define dependencies package-manager versions
 ENV NODEJS_APT_VERSION="${NODEJS_VERSION}-1nodesource1" \
