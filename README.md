@@ -20,7 +20,7 @@ services:
     volumes:
       - ./:/app
       - bundle:/bundle
-      - node_modules:/app/node_modules
+      - node_modules:/node_modules
       - config:/config
 ```
 
@@ -41,7 +41,7 @@ services:
       syncs:
         your_app-sync:
           src: ./
-          sync_excludes: [log, tmp, .git, .bundle, .idea, node_modules]
+          sync_excludes: [log, tmp, .git, .bundle, .idea]
       ```
 
   2. add the sync container as external container in `docker-compose.yml`:
@@ -94,8 +94,8 @@ docker-compose run app [rake|bash|...]
 
 Filesystem conventions:
 * `/app` holds your application source code
-* `/app/node_modules` holds packages installed by Yarn
 * `/bundle` holds gems installed by Bundler
+* `/node_modules` holds packages installed by Yarn
 * `/config` holds miscellaneous configuration files
 
 Dependencies conventions:
@@ -165,7 +165,7 @@ To **temporarily** install a package inside the container (_e.g._ for a one-time
 apt-get update && apt-get install <your_package>
 ```
 
-> ⚠️ This will probably **not be persisted** (because it will likely be installed in this container instance a UnionFS layer that will be discarded when you exit it).
+> ⚠️ This will probably **not be persisted** (because it will likely be installed in this container instance UnionFS layer that will be discarded when you exit it).
 
 To **permanently** install packages inside a container, you'll need to create a new Docker image based on this very one (or any of its tags). For example, to add packages needed to compile [Thoughtbot](https://thoughtbot.com)'s [`capybara-webkit`](https://github.com/thoughtbot/capybara-webkit) gem native extensions, create the following `Dockerfile` in your project root folder (it will build an image based on this one but with some extra packages installed by `apt-get` on top of it):
 
@@ -188,4 +188,7 @@ Then, change your `docker-compose.yml` to use it (and to build it on-demand) by 
 
 Contributions are indeed warmly welcome as [pull requests](https://github.com/alpinelab/docker-ruby-dev/pulls), or [issues](https://github.com/alpinelab/docker-ruby-dev/issues).
 
-There's also a handy [`add-ruby-version-support.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/add-ruby-version-support.sh) script to add support for a Ruby version and another handy [`rebase-all.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/rebase-all.sh) script to apply a change made on `latest` branch to all other branches.
+There's also a few handy scripts to help maintainance tasks:
+* [`add-ruby-version-support.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/add-ruby-version-support.sh) adds support for a Ruby version
+* [`rebase-all.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/rebase-all.sh) applies a change made on `latest` branch to all other branches
+* [`build_all.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/rebase-all.sh) builds images on all branches and pushes them to Docker repository
