@@ -9,8 +9,8 @@ pushd () { command pushd "$@" > /dev/null ; }
 popd  () { command popd  "$@" > /dev/null ; }
 
 pushd "${THIS_SCRIPT_PATH}"
-  # Make sure all remote branches are tracked
-  git branch --remotes | grep -v '\->' | while read remote; do
+  # Make sure all remote `ruby-*` branches are tracked
+  git branch --remotes | grep 'origin/ruby-' | while read remote; do
     branch="${remote#origin/}"
     git rev-parse --quiet --verify "${branch}" > /dev/null \
       && git branch --quiet --set-upstream-to="${remote}" "${branch}" \
@@ -21,7 +21,7 @@ pushd "${THIS_SCRIPT_PATH}"
   git pull --all --quiet
 
   # Rebase each branch on `latest`
-  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/ | grep -v '^latest$'); do
+  for branch in $(git for-each-ref --format='%(refname:short)' refs/heads/ | grep '^ruby-'); do
     echo "Rebasing branch ${branch}"
     git checkout --quiet ${branch}
     git pull --quiet origin ${branch}
