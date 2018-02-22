@@ -18,7 +18,7 @@ services:
   app:
     image: alpinelab/ruby-dev
     volumes:
-      - ./:/app
+      - .:/app
       - bundle:/bundle
       - node_modules:/app/node_modules
       - config:/config

@@ -11,7 +11,8 @@ ENV NODEJS_VERSION="8.9.4" \
     YARN_VERSION="1.3.2" \
     FOREMAN_VERSION="0.84.0" \
     HEROKU_CLI_VERSION="6.15.26" \
-    RUBYGEMS_VERSION="2.7.6"
+    RUBYGEMS_VERSION="2.7.6" \
+    GOSU_VERSION="1.10"
 
 # Define dependencies package-manager versions
 ENV NODEJS_APT_VERSION="${NODEJS_VERSION}-1nodesource1" \
@@ -51,13 +52,21 @@ RUN apt-get update \
       yarn=${YARN_APT_VERSION} \
  && rm -rf /var/lib/apt/lists/*
 
+# Install `gosu`
+RUN GNUPGHOME="$(mktemp -d)" dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
+ && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "B42F6819007F00F88E364FD4036A9C25BF357DD4" \
+ && curl -sSL -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}" \
+ && curl -sSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}.asc" | gpg --batch --verify - /usr/local/bin/gosu \
+ && chmod +x /usr/local/bin/gosu \
+ && rm -rf "$${GNUPGHOME}"
+
 # Install GEM dependencies
 RUN gem update --system ${RUBYGEMS_VERSION} \
  && gem install \
       foreman:${FOREMAN_VERSION}
 
-# Add dot files to home directory (to persist IRB/Pry/Rails console history, to configure Yarn, etc…)
-COPY dotfiles/* /root/
+# Add dot files to the home directory skeleton (they persist IRB/Pry/Rails console history, configure Yarn, etc…)
+COPY dotfiles/* /etc/skel/
 
 # Configure the main working directory.
 WORKDIR /app
@@ -67,7 +76,7 @@ EXPOSE ${PORT}
 
 # Use wrappers that check and maintain Ruby & JS dependencies (if necessary) as entrypoint
 COPY bin/* /usr/local/bin/
-ENTRYPOINT ["bundler-wrapper", "yarn-wrapper"]
+ENTRYPOINT ["gosu-wrapper", "bundler-wrapper", "yarn-wrapper"]
 
 # The main command to run when the container starts is to start whatever the Procfile defines
 CMD ["foreman", "start"]

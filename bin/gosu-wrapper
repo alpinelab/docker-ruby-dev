@@ -1,0 +1,25 @@
+#!/bin/bash
+
+export APP_USER_NAME="user"
+
+groupadd                           \
+  --gid $(stat --format '%g' /app) \
+  --non-unique                     \
+  ${APP_USER_NAME}
+
+useradd                            \
+  --shell "/bin/bash"              \
+  --uid $(stat --format '%u' /app) \
+  --gid $(stat --format '%g' /app) \
+  --no-user-group                  \
+  --comment "Docker Ruby dev <3"   \
+  --non-unique                     \
+  --create-home                    \
+  ${APP_USER_NAME}
+
+chown --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
+  /bundle                                           \
+  /config                                           \
+  /app/node_modules
+
+gosu ${APP_USER_NAME} "$@"
