@@ -73,6 +73,12 @@ docker-compose run app [rake|bash|...]
 
 > 💡 Note that you don't need to prefix commands with `bundle exec`.
 
+You can even bypass dependencies check before the command is run by overriding the entrypoint from the command-line:
+
+```shell
+docker-compose run --entrypoint=bypass app bash
+```
+
 ## About
 
 ### Goals
