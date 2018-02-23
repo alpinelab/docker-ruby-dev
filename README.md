@@ -10,7 +10,7 @@ The default command (when you just `docker-compose up`) is to run `foreman start
 
 We try to use sane default conventions so you don't have to think about it, but this image also allows some configuration (_e.g._ Heroku CLI or Git authentication) and [customisation](#customisation) (install extra software inside the container). Head to [RECIPES.md](RECIPES.md) for more details and examples.
 
-> :books: TL;DR:
+> **TL;DR** 🙄
 >
 > * your codebase is 2-way-mounted from your host to `/app` inside the container
 > * [Yarn](https://yarnpkg.com) is configured to store modules in `/app/node_modules`
@@ -103,26 +103,27 @@ You can customise this image by **building your own image based on this one** (o
 
   1. create a `Dockerfile` in your project root folder, and add a build step that installs the APT package you need (other installation methods work too, but it's out of the scope of this documentation):
 
-    ```Dockerfile
-    FROM alpinelab/ruby-dev
+      ```Dockerfile
+      FROM alpinelab/ruby-dev
 
-    RUN apt-get update \
-     && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
-          <INSERT APT PACKAGE NAME HERE> \
-     && rm -rf /var/lib/apt/lists/*
-    ```
+      RUN apt-get update \
+       && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+            <INSERT APT PACKAGE NAME HERE> \
+       && rm -rf /var/lib/apt/lists/*
+      ```
 
-  2. change your `docker-compose.yml` to use this `Dockerfile`, rather than an upstream image (and to build it on-demand) by changing:
+  2. change your `docker-compose.yml` to use this `Dockerfile` (rather than an upstream image) and to build it on-demand:
+    * change this line:
 
-    ```
-    image: alpinelab/ruby-dev
-    ```
+        ```yaml
+        image: alpinelab/ruby-dev
+        ```
 
-    into
+    * into this line:
 
-    ```
-    build: .
-    ```
+        ```yaml
+        build: .
+        ```
 
 > ℹ️ To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply run the following command from a shell inside the container:
 >
