@@ -1,7 +1,5 @@
 # `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-This image provides an easy, generic, consistent and non-intrusive Docker Compose setup for all your Ruby projects.
-
 The main goal of this project is to have a single Docker image to develop all your Ruby projects, with **all dependencies contained inside Docker** (like gems, NPM packages or even Ruby itself, that won't pollute your host environment) and without anything specific to the project in the Docker image (the **codebase is mounted directly from the host filesystem into the container**, thus you'll never have to build the image when you add a gem or change some code).
 
 The Docker container also provides developer-friendly tools and behaviours like persisted **Ruby console history** (IRB and Pry), **shell history**, or even auto-installing dependencies (that's right:  simply change your `Gemfile` or `package.json` and **`bundle install` or `yarn install` will be run automatically** for you and only when necessary). It also provides a few CLI tools to get your hands dirty, but as least as possible: `vim`, `nano`, `heroku`.
