@@ -1,6 +1,24 @@
 # `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
 
-This image provides an easy, generic, consistent and non-intrusive Docker Compose setup for all your Ruby projects. [Why?](#about)
+This image provides an easy, generic, consistent and non-intrusive Docker Compose setup for all your Ruby projects.
+
+The main goal of this project is to have a single Docker image to develop all your Ruby projects, with **all dependencies contained inside Docker** (like gems, NPM packages or even Ruby itself, that won't pollute your host environment) and without anything specific to the project in the Docker image (the **codebase is mounted directly from the host filesystem into the container**, thus you'll never have to build the image when you add a gem or change some code).
+
+The Docker container also provides developer-friendly tools and behaviours like persisted **Ruby console history** (IRB and Pry), **shell history**, or even auto-installing dependencies (that's right:  simply change your `Gemfile` or `package.json` and **`bundle install` or `yarn install` will be run automatically** for you and only when necessary). It also provides a few CLI tools to get your hands dirty, but as least as possible: `vim`, `nano`, `heroku`.
+
+The default command (when you just `docker-compose up`) is to run `foreman start`, thus starting whatever you put in your `Procfile`. All commands are run inside the container as the same user that owns your codebase (thus probably your host user), which means that any file generated inside the container (think of `rails generate`, `yarn init`, or even log files) will be owned by you (not by `root`, like they would with a default Docker configuration).
+
+We try to use sane default conventions so you don't have to think about it, but this image also allows some configuration (_e.g._ Heroku CLI or Git authentication) and [customisation](#customisation) (install extra software inside the container). Head to [RECIPES.md](RECIPES.md) for more details and examples.
+
+> :books: TL;DR:
+>
+> * your codebase is 2-way-mounted from your host to `/app` inside the container
+> * [Yarn](https://yarnpkg.com) is configured to store modules in `/app/node_modules`
+> * [Bundler](https://bundler.io) is configured to store gems in `/bundle`
+> * everything ran inside the container is done with your host user UID and GID
+> * `bundle install` is run before any command, only if necessary
+> * `yarn install` is run before any command, only if necessary
+> * you can [customise](RECIPES.md) the image with extra software
 
 ## Usage
 
@@ -37,7 +55,7 @@ services:
   1. add a `docker-sync.yml` file:
 
       ```yaml
-      version: "2"
+      version: "3"
       syncs:
         your_app-sync:
           src: ./
@@ -79,116 +97,42 @@ You can even bypass dependencies check before the command is run by overriding t
 docker-compose run --entrypoint=bypass app bash
 ```
 
-## About
-
-### Goals
-
-* use the same Docker image in all your projects
-* stop messing your host environment with multiple rubies and gemsets
-* stop building your Docker image every time you change your `Gemfile` (or worse: your code :scream:)
-* use up-to-date Ruby, Bundler, Node and Yarn versions
-
-### Features
-
-* shell history
-* IRB/Pry history
-* auto-install Ruby (Bundler) and Javascript (NPM) dependencies
-* basic in-container tools (`vim`, `nano`, `heroku`, …)
-* runs whatever you define in the `Procfile`
-
-### Conventions
-
-Filesystem conventions:
-* `/app` holds your application source code
-* `/app/node_modules` holds packages installed by Yarn
-* `/bundle` holds gems installed by Bundler
-* `/config` holds miscellaneous configuration files
-
-Dependencies conventions:
-* `bundle install` is run before any command if necessary
-* `yarn install` is run before any command if necessary
-
-Other conventions:
-* the default command run by the image is `foreman start`
-
-## Configuration
-
-Most configurations can be done from a `docker-compose.override.yml` file alongside your `docker-compose.yml` file (by default, it will be [automatically read](https://docs.docker.com/compose/extends/#multiple-compose-files) by `docker-compose`, and it should probably be [gitignore'd globally](https://help.github.com/articles/ignoring-files/#create-a-global-gitignore)).
-
-### Heroku CLI authentication
-
-The recommended approach to have the Heroku CLI authenticated is to set the `HEROKU_API_KEY` in `docker-compose.override.yml` with an OAuth token:
-
-```yaml
-version: "3"
-services:
-  app:
-    environment:
-      HEROKU_API_KEY: 12345-67890-abcdef
-```
-
-If you don't have an [OAuth token](https://github.com/heroku/heroku-cli-oauth#authorizations) yet, you can create and output one with:
-
-```shell
-heroku authorizations:create --output-format short --description "Docker [alpinelab/ruby-dev]"
-```
-
-An alternative but less secure approach would be to mount your host's `~/.netrc` to the container's `/root/.netrc`.
-
-### Git authentication
-
-If you're using SSH as underlying Git protocol, you may want to use your host SSH authentication from within the container (to use `git` from there, for example).
-
-You can do it by mounting your host's `~/.ssh` to the container's `/root/.ssh` from `docker-compose.override.yml`:
-
-```yaml
-version: "3"
-services:
-  app:
-    volumes:
-      - ~/.ssh:/root/.ssh
-```
-
 ## Customisation
 
-### Custom Yarn check command
+You can customise this image by **building your own image based on this one** (or any of its tags, by appending them to the `FROM` step of the `Dockerfile`), and install additional software on top of it:
 
-By default, we use `yarn check --integrity --verify-tree --silent` to check that all JS dependencies are met, but you can override this if you need to by defining your own `check` command in the `scripts` section of `package.json`, like:
+  1. create a `Dockerfile` in your project root folder, and add a build step that installs the APT package you need (other installation methods work too, but it's out of the scope of this documentation):
 
-```json
-{
-  "scripts": {
-    "check": "cd client && yarn check --integrity --verify-tree --silent"
-  }
-}
-```
+    ```Dockerfile
+    FROM alpinelab/ruby-dev
 
-### Installing software in the container
+    RUN apt-get update \
+     && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+          <INSERT APT PACKAGE NAME HERE> \
+     && rm -rf /var/lib/apt/lists/*
+    ```
 
-To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply run:
+  2. change your `docker-compose.yml` to use this `Dockerfile`, rather than an upstream image (and to build it on-demand) by changing:
 
-```shell
-apt-get update && apt-get install <your_package>
-```
+    ```
+    image: alpinelab/ruby-dev
+    ```
 
-> ⚠️ This will probably **not be persisted** (because it will likely be installed in this container instance a UnionFS layer that will be discarded when you exit it).
+    into
 
-To **permanently** install packages inside a container, you'll need to create a new Docker image based on this very one (or any of its tags). For example, to add packages needed to compile [Thoughtbot](https://thoughtbot.com)'s [`capybara-webkit`](https://github.com/thoughtbot/capybara-webkit) gem native extensions, create the following `Dockerfile` in your project root folder (it will build an image based on this one but with some extra packages installed by `apt-get` on top of it):
+    ```
+    build: .
+    ```
 
-```Dockerfile
-FROM alpinelab/ruby-dev
+> ℹ️ To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply run the following command from a shell inside the container:
+>
+> ```shell
+> apt-get update && apt-get install <your_package>
+> ```
 
-RUN apt-get update \
- && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
-      qt5-default \
-      libqt5webkit5-dev \
-      gstreamer1.0-plugins-base \
-      gstreamer1.0-tools \
-      gstreamer1.0-x \
- && rm -rf /var/lib/apt/lists/*
-```
+## Known issues
 
-Then, change your `docker-compose.yml` to use it (and to build it on-demand) by changing `image: alpinelab/ruby-dev` to `build: .`.
+A wild `node_modules` directory owned by `root` may appear in your codebase directory. This is due to Docker [creating the destination mount point](https://github.com/moby/moby/issues/26051) for the bind mount. It should be solved when we will be able to reliably configure Yarn to [use an absolute directory](https://github.com/alpinelab/docker-ruby-dev/issues/1) (instead of relative `node_modules`) outside of the codebase, like we do with Bundler.
 
 ## Contributing
 
