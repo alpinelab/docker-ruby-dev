@@ -135,6 +135,6 @@ A wild `node_modules` directory owned by `root` may appear in your codebase dire
 
 ## Contributing
 
-Contributions are indeed warmly welcome as [pull requests](https://github.com/alpinelab/docker-ruby-dev/pulls), or [issues](https://github.com/alpinelab/docker-ruby-dev/issues).
+Contributions are indeed warmly welcome as [pull requests](https://github.com/alpinelab/docker-ruby-dev/pulls), or [issues](https://github.com/alpinelab/docker-ruby-dev/issues) ❤️
 
 There's also a handy [`add-ruby-version-support.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/add-ruby-version-support.sh) script to add support for a Ruby version and another handy [`rebase-all.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/rebase-all.sh) script to apply a change made on `latest` branch to all other branches.
