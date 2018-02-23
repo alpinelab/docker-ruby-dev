@@ -4,7 +4,7 @@ The main goal of this project is to have a single Docker image to develop all yo
 
 The Docker container also provides developer-friendly tools and behaviours like persisted **Ruby console history** (IRB and Pry), **shell history**, or even auto-installing dependencies (that's right:  simply change your `Gemfile` or `package.json` and **`bundle install` or `yarn install` will be run automatically** for you and only when necessary). It also provides a few CLI tools to get your hands dirty, but as least as possible: `vim`, `nano`, `heroku`.
 
-The default command (when you just `docker-compose up`) is to run `foreman start`, thus starting whatever you put in your `Procfile`. All commands are run inside the container as the same user that owns your codebase (thus probably your host user), which means that any file generated inside the container (think of `rails generate`, `yarn init`, or even log files) will be owned by you (not by `root`, like they would with a default Docker configuration).
+The default command (when you just `docker-compose up`) is to run `foreman start`, thus starting whatever you put in your `Procfile`. All commands are run inside the container **as the same user that owns your codebase** (thus probably your host user), which means that any file generated inside the container (think of `rails generate`, `yarn init`, or even log files) will be owned by yourself (not by `root`, like they would with a default Docker configuration).
 
 We try to use sane default conventions so you don't have to think about it, but this image also allows some configuration (_e.g._ Heroku CLI or Git authentication) and [customisation](#customisation) (install extra software inside the container). See the [recipes book](RECIPES.md) for more details.
 
