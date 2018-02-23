@@ -53,12 +53,12 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 
 # Install `gosu`
-RUN GNUPGHOME="$(mktemp -d)" dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF }')" \
+RUN export GNUPGHOME="$(mktemp -d)" dpkgArch="$(dpkg --print-architecture | cut -d- -f1)" \
  && gpg --keyserver ha.pool.sks-keyservers.net --recv-keys "B42F6819007F00F88E364FD4036A9C25BF357DD4" \
  && curl -sSL -o /usr/local/bin/gosu "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}" \
  && curl -sSL "https://github.com/tianon/gosu/releases/download/${GOSU_VERSION}/gosu-${dpkgArch}.asc" | gpg --batch --verify - /usr/local/bin/gosu \
  && chmod +x /usr/local/bin/gosu \
- && rm -rf "$${GNUPGHOME}"
+ && rm -rf "${GNUPGHOME}"
 
 # Install GEM dependencies
 RUN gem update --system ${RUBYGEMS_VERSION} \
