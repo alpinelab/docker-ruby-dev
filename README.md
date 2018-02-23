@@ -40,7 +40,7 @@ services:
       - config:/config
 ```
 
-> :bulb: Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support multiple Ruby versions [via image tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
+> :bulb: Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support multiple Ruby versions [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
 
 <details>
 
