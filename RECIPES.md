@@ -10,6 +10,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 
   * [Usage](#usage)
     * [with PostgreSQL](#with-postgresql)
+    * [with MailCatcher](#with-mailcatcher)
   * [Configuration](#configuration):
     * [Heroku CLI authentication](#heroku-cli-authentication)
     * [Git authentication](#git-authentication)
