@@ -17,9 +17,9 @@ useradd                            \
   --create-home                    \
   ${APP_USER_NAME}
 
-chown --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
-  /bundle                                           \
-  /config                                           \
+chown --silent --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
+  /bundle                                                    \
+  /config                                                    \
   /app/node_modules
 
 gosu ${APP_USER_NAME} "$@"
