@@ -8,6 +8,8 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 
   <summary>Table of contents</summary>
 
+  * [Usage](#usage)
+    * [with PostgreSQL](#with-postgresql)
   * [Configuration](#configuration):
     * [Heroku CLI authentication](#heroku-cli-authentication)
     * [Git authentication](#git-authentication)
@@ -18,6 +20,83 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     * [rails-erd](#rails-erd)
 
 </details>
+
+## Usage
+
+### With PostgreSQL
+
+This is a minimal configuration for a Ruby application that uses a [PostgreSQL](https://www.postgresql.org) server with persisted data:
+
+```yaml
+version: "3"
+volumes:
+  bundle:        { driver: local }
+  config:        { driver: local }
+  postgres-data: { driver: local }
+services:
+  app:
+    image: alpinelab/ruby-dev
+    volumes:
+      - .:/app
+      - bundle:/bundle
+      - config:/config
+    links:
+      - postgres
+  postgres:
+    image: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+```
+
+Here is what it does:
+
+* create a Docker volume to persist the databases:
+
+    ```yaml
+    postgres-data: { driver: local }
+    ```
+
+* create a service for the PostgreSQL server (that mounts this volume where it will store databases)
+
+    ```yaml
+    postgres:
+      image: postgres
+      volumes:
+        - postgres-data:/var/lib/postgresql/data
+    ```
+
+* link this server to the application service (`app`), so it will be started whenever it's needed and it can be accessed inside Docker network by its name (`postgres`):
+
+    ```yaml
+    links:
+      - postgres
+    ```
+
+From within the Ruby application, the Postgres server is accessible at the fully-qualified URL `postgres://postgres:@postgres/<DATABASE_NAME>`, or using the following `config/database.yml` if you are using Rails:
+
+```yaml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: postgres
+  port: 5432
+  username: postgres
+  password:
+
+development:
+  <<: *default
+  database: app_development
+
+test:
+  <<: *default
+  database: app_test
+
+production:
+  <<: *default
+  database: app_production
+```
+
+> ℹ️ There is almost no risk of database name collision with other projects of yours since Docker Compose will create a different volume for each different `docker-compose.yml` file, hence the very generic database names used here.
 
 ## Configuration
 
