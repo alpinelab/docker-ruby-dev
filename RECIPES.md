@@ -56,7 +56,7 @@ Here is what it does:
     postgres-data: { driver: local }
     ```
 
-* create a service for the PostgreSQL server (that mounts this volume where it will store databases)
+* create a service for the PostgreSQL server (that mounts this volume where it will store databases):
 
     ```yaml
     postgres:
@@ -97,6 +97,60 @@ production:
 ```
 
 > ℹ️ There is almost no risk of database name collision with other projects of yours since Docker Compose will create a different volume for each different `docker-compose.yml` file, hence the very generic database names used here.
+
+### With MailCatcher
+
+This is a minimal configuration to use [MailCatcher](https://mailcatcher.me) to intercept and read all emails sent by your application:
+
+```yaml
+version: "3"
+volumes:
+  bundle: { driver: local }
+  config: { driver: local }
+services:
+  app:
+    image: alpinelab/ruby-dev
+    volumes:
+      - .:/app
+      - bundle:/bundle
+      - config:/config
+    links:
+      - mailcatcher
+  mailcatcher:
+    image: schickling/mailcatcher
+    ports:
+      - "1080:1080"
+```
+
+Here is what it does:
+
+* create a service for the MailCatcher server, that publishes the web server port (`1080`) to the host OS:
+
+    ```yaml
+    mailcatcher:
+      image: schickling/mailcatcher
+      ports:
+        - "1080:1080"
+    ```
+
+* link this server to the application service (`app`), so it will be started whenever it's needed and it can be accessed inside Docker network by its name (`mailcatcher`):
+
+    ```yaml
+    links:
+      - mailcatcher
+    ```
+
+You can now configure your application to use SMTP server on hostname `mailcatcher` and port `1025`, the fully-qualified URL `smtp://mailcatcher:1025` or the following configuration if you are using Rails:
+
+```ruby
+config.action_mailer.delivery_method       = :smtp
+config.action_mailer.smtp_settings         = { address: "mailcatcher", port: 1025 }
+config.action_mailer.raise_delivery_errors = false
+```
+
+Your application will now send all emails to MailCatcher SMTP server and you can check them on http://localhost:1080 📩
+
+> 💡 Use this config in `config/environments/development.rb` only, or use environment variables instead of hard-coded values if you want a generic configuration (working for both development and production) in `config/application.rb`.
 
 ## Configuration
 
