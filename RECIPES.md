@@ -14,6 +14,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
   * [Configuration](#configuration):
     * [Heroku CLI authentication](#heroku-cli-authentication)
     * [Git authentication](#git-authentication)
+    * [RubyGems authentication](#rubygems-authentication)
     * [Custom Yarn check command](#custom-yarn-check-command)
   * [Customisation](#customisation):
     * [capybara-webkit](#capybara-webkit)
@@ -175,21 +176,39 @@ If you don't have an [OAuth token](https://github.com/heroku/heroku-cli-oauth#au
 heroku authorizations:create --output-format short --description "Docker [alpinelab/ruby-dev]"
 ```
 
-An alternative but less secure approach would be to mount your host's `~/.netrc` to the container's `/root/.netrc`.
+An alternative but less secure approach would be to mount your host's `~/.netrc` to the container's `/etc/skel/.netrc` so that it will copied into the user's home directory.
 
 ### Git authentication
 
 If you're using SSH as underlying Git protocol, you may want to use your host SSH authentication from within the container (to use `git` from there, for example).
 
-You can do it by mounting your host's `~/.ssh` to the container's `/root/.ssh` from `docker-compose.override.yml`:
+You can do it by mounting your host's `~/.ssh` to the container's `/etc/skel/.ssh` directory from `docker-compose.override.yml`:
 
 ```yaml
 version: "3"
 services:
   app:
     volumes:
-      - ~/.ssh:/root/.ssh
+      - ~/.ssh:/etc/skel/.ssh
 ```
+
+It will be copied into the user's home directory before any command run into the container.
+
+### RubyGems authentication
+
+If you want to build and publish gems from within the container (_e.g._ [using Bundler's `rake release` task](https://www.schneems.com/blogs/2016-03-18-bundler-release-tasks)), you may want to use your host's RubyGems credentials.
+
+You can do it by mounting your host's `~/.gem/credentials` to the container's `/etc/skel/.gem/credentials` directory from `docker-compose.override.yml`:
+
+```yaml
+version: "3"
+services:
+  app:
+    volumes:
+      - ~/.gem/credentials:/etc/skel/.gem/credentials
+```
+
+It will be copied into the user's home directory before any command run into the container.
 
 ### Custom Yarn check command
 
