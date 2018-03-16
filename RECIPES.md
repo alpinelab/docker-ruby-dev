@@ -277,7 +277,7 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/*
 ```
 
-### rails-erd
+### phantomjs
 
 This `Dockerfile` adds the [PhantomJS](http://phantomjs.org) binary from BitBucket:
 
