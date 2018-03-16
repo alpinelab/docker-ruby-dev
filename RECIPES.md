@@ -20,6 +20,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     * [capybara-webkit](#capybara-webkit)
     * [wkhtmltopdf](#wkhtmltopdf)
     * [rails-erd](#rails-erd)
+    * [phantomjs](#phantomjs)
 
 </details>
 
@@ -274,4 +275,18 @@ RUN apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       graphviz=${GRAPHVIZ_VERSION} \
  && rm -rf /var/lib/apt/lists/*
+```
+
+### rails-erd
+
+This `Dockerfile` adds the [PhantomJS](http://phantomjs.org) binary from BitBucket:
+
+```Dockerfile
+FROM alpinelab/ruby-dev
+
+ENV PHANTOMJS_VERSION="2.1.1"
+
+RUN cpuArch="$(lscpu | sed -n 's/Architecture: *\(.*\)/\1/p')" \
+ && curl --silent --location "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PHANTOMJS_VERSION}-linux-${cpuArch}.tar.bz2" \
+  | tar --extract --bzip2 --directory /usr/local/bin --strip-components=2 "phantomjs-${PHANTOMJS_VERSION}-linux-${cpuArch}/bin/phantomjs"
 ```
