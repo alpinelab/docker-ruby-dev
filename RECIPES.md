@@ -174,7 +174,7 @@ services:
 If you don't have an [OAuth token](https://github.com/heroku/heroku-cli-oauth#authorizations) yet, you can create and output one with:
 
 ```shell
-heroku authorizations:create --output-format short --description "Docker [alpinelab/ruby-dev]"
+heroku authorizations:create --short --description "Docker [alpinelab/ruby-dev]"
 ```
 
 An alternative but less secure approach would be to mount your host's `~/.netrc` to the container's `/etc/skel/.netrc` so that it will copied into the user's home directory.
