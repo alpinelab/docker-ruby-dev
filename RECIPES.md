@@ -9,8 +9,9 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
   <summary>Table of contents</summary>
 
   * [Usage](#usage)
-    * [with PostgreSQL](#with-postgresql)
-    * [with MailCatcher](#with-mailcatcher)
+    * [creating a Rails application from scratch](#creating-a-rails-application-from-scratch)
+    * [using PostgreSQL](#using-postgresql)
+    * [using MailCatcher](#using-mailcatcher)
   * [Configuration](#configuration):
     * [Heroku CLI authentication](#heroku-cli-authentication)
     * [Git authentication](#git-authentication)
@@ -26,7 +27,26 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 
 ## Usage
 
-### With PostgreSQL
+### Creating a Rails application from scratch
+
+Once you created your default `docker-compose.yml` (see [README](README.md)) in a newly created (thus, empty) directory that will hold your project, and since you don't want to have the `rails` gem installed on your host, you can run the following instead of the usual `gem install rails && rails new ...` that you will find in every documentation and tutorial out there:
+
+```shell
+docker-compose run app bash -c "bundle init && bundle add rails && rails new . --force"
+```
+
+> 💡 You can specify the Rails version you want by appending the [`--version` switch](https://bundler.io/v1.16/man/bundle-add.1.html#OPTIONS) to the `bundle add rails` command (_e.g._ `--version "~> 5.2.0"`).
+> ℹ️ The `--force` switch passed to the `rails new` command will overwrite the first version of the `Gemfile` (used only to install `rake` and `rails`)
+
+Then, simply create a `Procfile` with the following content:
+
+```
+web: bundle exec puma
+```
+
+Now, run `docker-compose up app` as usual and you're [good to go 🎉](http://localhost:5000).
+
+### Using PostgreSQL
 
 This is a minimal configuration for a Ruby application that uses a [PostgreSQL](https://www.postgresql.org) server with persisted data:
 
@@ -101,7 +121,7 @@ production:
 
 > ℹ️ There is almost no risk of database name collision with other projects of yours since Docker Compose will create a different volume for each different `docker-compose.yml` file, hence the very generic database names used here.
 
-### With MailCatcher
+### Using MailCatcher
 
 This is a minimal configuration to use [MailCatcher](https://mailcatcher.me) to intercept and read all emails sent by your application:
 
