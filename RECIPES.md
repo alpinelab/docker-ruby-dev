@@ -29,22 +29,33 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 
 ### Creating a Rails application from scratch
 
-Once you created your default `docker-compose.yml` (see [README](README.md)) in a newly created (thus, empty) directory that will hold your project, and since you don't want to have the `rails` gem installed on your host, you can run the following instead of the usual `gem install rails && rails new ...` that you will find in every documentation and tutorial out there:
+1. Create an empty directory to hold your project code:
 
-```shell
-docker-compose run app bash -c "bundle init && bundle add rails && rails new . --force"
-```
+    ```shell
+    mkdir my_project
+    ```
 
-> 💡 You can specify the Rails version you want by appending the [`--version` switch](https://bundler.io/v1.16/man/bundle-add.1.html#OPTIONS) to the `bundle add rails` command (_e.g._ `--version "~> 5.2.0"`).
-> ℹ️ The `--force` switch passed to the `rails new` command will overwrite the first version of the `Gemfile` (used only to install `rake` and `rails`)
+2. Create a default `docker-compose.yml` as described in the [`Setup` section of the `README`](https://github.com/alpinelab/docker-ruby-dev#setup)
 
-Then, simply create a `Procfile` with the following content:
+3. Install Rails and generate your Rails application (it replaces the usual `gem install rails && rails new my_project` command that you will find in every documentation and tutorial out there):
 
-```
-web: bundle exec puma
-```
+    ```shell
+    docker-compose run app bash -c "bundle init && bundle add rails && rails new . --force"
+    ```
 
-Now, run `docker-compose up app` as usual and you're [good to go 🎉](http://localhost:5000).
+    > 💡 You can specify the Rails version you want by appending the [`--version` switch](https://bundler.io/v1.16/man/bundle-add.1.html#OPTIONS) to the `bundle add rails` command (_e.g._ `--version "~> 5.2.0"`).
+    >
+    > ℹ️ The `--force` switch passed to the `rails new` command will overwrite the first version of the `Gemfile` (used only to install `rake` and `rails`)
+
+4. Create a `Procfile` that starts the Rails server:
+
+    ```
+    web: bundle exec rails server -b 0.0.0.0
+    ```
+
+    > ⚠️ Whatever you do in this `Procfile`, always configure your servers to listen on `0.0.0.0` (`puma` [does it](https://github.com/puma/puma/blob/8dbc6eb6ed96b2cefa7092dd398ea2c0a4a0be80/lib/puma/configuration.rb#L10) by default but using `rails server` [forces it](https://github.com/rails/rails/blob/b10f371366a606310cab26648d798836e030bdc8/railties/lib/rails/commands/server/server_command.rb#L236) to listen to `localhost`, unless you override it again using the `-b|--binding` switch like above). Without it, you won't be able to connect to this server from outside the running container.
+
+5. Run `docker-compose up app` as usual and you're [good to profit 🎉](http://localhost:5000).
 
 ### Using PostgreSQL
 
