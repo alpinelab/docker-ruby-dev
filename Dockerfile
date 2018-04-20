@@ -7,10 +7,10 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define dependencies base versions
-ENV NODEJS_VERSION="8.9.4" \
-    YARN_VERSION="1.3.2" \
+ENV NODEJS_VERSION="8.11.1" \
+    YARN_VERSION="1.6.0" \
     FOREMAN_VERSION="0.84.0" \
-    HEROKU_CLI_VERSION="6.15.26" \
+    HEROKU_CLI_VERSION="6.16.16" \
     RUBYGEMS_VERSION="2.7.6" \
     GOSU_VERSION="1.10"
 
