@@ -10,14 +10,12 @@ ENV LANG="C.UTF-8"
 ENV NODEJS_VERSION="8.11.1" \
     YARN_VERSION="1.6.0" \
     FOREMAN_VERSION="0.84.0" \
-    HEROKU_CLI_VERSION="7.0.12" \
     RUBYGEMS_VERSION="2.7.6" \
     GOSU_VERSION="1.10"
 
 # Define dependencies package-manager versions
 ENV NODEJS_APT_VERSION="${NODEJS_VERSION}-1nodesource1" \
-    YARN_APT_VERSION="${YARN_VERSION}-1" \
-    HEROKU_CLI_APT_VERSION="${HEROKU_CLI_VERSION}-1"
+    YARN_APT_VERSION="${YARN_VERSION}-1"
 
 # Define some default variables
 ENV PORT="5000" \
@@ -45,7 +43,7 @@ RUN apt-get update \
  && curl -sS https://cli-assets.heroku.com/apt/release.key | apt-key add - \
  && apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
-      heroku=${HEROKU_CLI_APT_VERSION} \
+      heroku \
       nano \
       nodejs=${NODEJS_APT_VERSION} \
       postgresql-client-10 \
