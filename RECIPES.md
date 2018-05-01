@@ -11,6 +11,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
   * [Usage](#usage)
     * [creating a Rails application from scratch](#creating-a-rails-application-from-scratch)
     * [using PostgreSQL](#using-postgresql)
+    * [using PGAdmin](#using-pgadmin)
     * [using MailCatcher](#using-mailcatcher)
   * [Configuration](#configuration):
     * [Heroku CLI authentication](#heroku-cli-authentication)
@@ -133,6 +134,55 @@ production:
 ```
 
 > ℹ️ There is almost no risk of database name collision with other projects of yours since Docker Compose will create a different volume for each different `docker-compose.yml` file, hence the very generic database names used here.
+
+### Using PGAdmin
+
+This is a minimal configuration demonstrating how use [PGAdmin 4](https://www.pgadmin.org) to manage a PostgreSQL database configured as described in the above section:
+
+```yaml
+version: "3"
+volumes:
+  postgres-data:  { driver: local }
+  pgadmin-config: { driver: local }
+services:
+  postgres:
+    image: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+  pgadmin:
+    image: thajeztah/pgadmin4
+    ports:
+      - "5050:5050"
+    volumes:
+      - pgadmin-config:/pgadmin
+    links:
+      - postgres
+```
+
+> ℹ️ Note that this example doesn't include your own application configuration because it is completely independent from your code. A real world `docker-compose.yml` would indeed include it.
+
+Here is what it does:
+
+* create a Docker volume to persist the configuration:
+
+    ```yaml
+    pgadmin-config: { driver: local }
+    ```
+
+* create a service for the PGAdmin4 server that publishes the web server port (`5050`) to the host OS, uses the previously created volume to persist configuration (_i.e._ mount it on `/pgadmin`) and links to the PostgreSQL server (to autostart it and be able to reach it by its name in the Docker Compose virtual network):
+
+    ```yaml
+    pgadmin:
+      image: thajeztah/pgadmin4
+      ports:
+        - "5050:5050"
+      volumes:
+        - pgadmin-config:/pgadmin
+      links:
+        - postgres
+    ```
+
+You can now start PGAdmin using the usual command `docker-compose up pgadmin` then access it on http://localhost:5050 🐘 (from where you can configure it to connect to the PostgreSQL server on host `postgres` with user `postgres` and no password).
 
 ### Using MailCatcher
 
