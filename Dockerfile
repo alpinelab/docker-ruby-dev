@@ -26,7 +26,8 @@ ENV PORT="5000" \
     PATH="/app/bin:/bundle/bin:/bundle/global/bin:${PATH}" \
     HISTFILE="/config/.bash_history" \
     GIT_COMMITTER_NAME="Just some fake name to be able to git-clone" \
-    GIT_COMMITTER_EMAIL="whatever@this-user-is-not-supposed-to-git-push.anyway"
+    GIT_COMMITTER_EMAIL="whatever@this-user-is-not-supposed-to-git-push.anyway" \
+    DISABLE_SPRING="true"
 
 # Install APT dependencies
 RUN apt-get update \

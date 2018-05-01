@@ -40,12 +40,14 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 3. Install Rails and generate your Rails application (it replaces the usual `gem install rails && rails new my_project` command that you will find in every documentation and tutorial out there):
 
     ```shell
-    docker-compose run app bash -c "bundle init && bundle add rails && rails new . --force"
+    docker-compose run app bash -c "bundle init && bundle add rails && rails new . --force --skip-spring"
     ```
 
     > 💡 You can specify the Rails version you want by appending the [`--version` switch](https://bundler.io/v1.16/man/bundle-add.1.html#OPTIONS) to the `bundle add rails` command (_e.g._ `--version "~> 5.2.0"`).
     >
     > ℹ️ The `--force` switch passed to the `rails new` command will overwrite the first version of the `Gemfile` (used only to install `rake` and `rails`)
+    >
+    > ℹ️ The `--skip-spring` switch passed to the `rails new` command will prevent installing [Spring](https://github.com/rails/spring) because it makes no sense in a containerized environment (unless you want to [configure it on your host and configure it to manage containers](https://github.com/jonleighton/spring-docker-example) but it's out of the scope of this recipe and contradicts the purpose of this image).
 
 4. Create a `Procfile` that starts the Rails server:
 
