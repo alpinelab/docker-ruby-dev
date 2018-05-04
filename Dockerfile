@@ -63,9 +63,7 @@ RUN export GNUPGHOME="$(mktemp -d)" dpkgArch="$(dpkg --print-architecture | cut 
  && rm -rf "${GNUPGHOME}"
 
 # Install GEM dependencies
-RUN gem update --system ${RUBYGEMS_VERSION} \
- && gem install \
-      foreman:${FOREMAN_VERSION}
+RUN gem update --system ${RUBYGEMS_VERSION}
 
 # Add dot files to the home directory skeleton (they persist IRB/Pry/Rails console history, configure Yarn, etc…)
 COPY dotfiles/* /etc/skel/
