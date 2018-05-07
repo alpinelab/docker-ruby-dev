@@ -11,8 +11,9 @@ We try to use sane default conventions so you don't have to think about it, but 
 > **TL;DR** 🙄
 >
 > * your codebase is 2-way-mounted from your host to `/app` inside the container
-> * [Yarn](https://yarnpkg.com) is configured to store modules in `/app/node_modules`
-> * [Bundler](https://bundler.io) is configured to store gems in `/bundle`
+> * [Yarn](https://yarnpkg.com) is configured to store installed modules in `/app/node_modules`
+> * [Bundler](https://bundler.io) is configured to store installed gems in `/bundle`
+> * [Rubygems](https://github.com/rubygems/rubygems) is configured to store installed gems (using `gem install …` directly) in `/bundle/global`
 > * everything ran inside the container is done with your host user UID and GID
 > * `bundle install` is run before any command, only if necessary
 > * `yarn install` is run before any command, only if necessary
