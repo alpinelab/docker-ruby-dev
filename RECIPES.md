@@ -10,6 +10,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 
   * [Usage](#usage)
     * [creating a Rails application from scratch](#creating-a-rails-application-from-scratch)
+    * [creating a gem from scratch](#creating-a-gem-from-scratch)
     * [using PostgreSQL](#using-postgresql)
     * [using PGAdmin](#using-pgadmin)
     * [using MailCatcher](#using-mailcatcher)
@@ -59,6 +60,36 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     > ⚠️ Whatever you do in this `Procfile`, always configure your servers to listen on `0.0.0.0` (`puma` [does it](https://github.com/puma/puma/blob/8dbc6eb6ed96b2cefa7092dd398ea2c0a4a0be80/lib/puma/configuration.rb#L10) by default but using `rails server` [forces it](https://github.com/rails/rails/blob/b10f371366a606310cab26648d798836e030bdc8/railties/lib/rails/commands/server/server_command.rb#L236) to listen to `localhost`, unless you override it again using the `-b|--binding` switch like above). Without it, you won't be able to connect to this server from outside the running container.
 
 5. Run `docker-compose up app` as usual and you're [good to profit 🎉](http://localhost:5000).
+
+### Creating a gem from scratch
+
+1. Create an empty directory to hold your project code:
+
+    ```shell
+    mkdir my_project
+    ```
+
+2. Create a basic `docker-compose.yml` (even simpler than as described in the [`Setup` section of the `README`](https://github.com/alpinelab/docker-ruby-dev#setup) because it doesn't need any port:
+
+    ```yaml
+    version: "3"
+    volumes:
+      bundle: { driver: local }
+      config: { driver: local }
+    services:
+      app:
+        image: alpinelab/ruby-dev
+        volumes:
+          - .:/app
+          - bundle:/bundle
+          - config:/config
+    ```
+
+3. Generate your gem skeleton (it just needs to trick `bundler` to think that the current directory is available as a subdirectory named `my_project`):
+
+    ```shell
+    docker-compose run app bash -c "ln -s . my_project && bundle gem my_project && rm my_project"
+    ```
 
 ### Using PostgreSQL
 
