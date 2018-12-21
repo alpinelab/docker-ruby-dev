@@ -7,11 +7,10 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define dependencies base versions
-ENV NODEJS_VERSION="8.11.1" \
-    YARN_VERSION="1.6.0" \
-    FOREMAN_VERSION="0.84.0" \
-    RUBYGEMS_VERSION="2.7.6" \
-    GOSU_VERSION="1.10"
+ENV NODEJS_VERSION="10.14.2" \
+    YARN_VERSION="1.12.3" \
+    RUBYGEMS_VERSION="2.7.8" \
+    GOSU_VERSION="1.11"
 
 # Define dependencies package-manager versions
 ENV NODEJS_APT_VERSION="${NODEJS_VERSION}-1nodesource1" \
@@ -36,7 +35,7 @@ RUN apt-get update \
       lsb-release \
  && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
  && curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
- && echo "deb https://deb.nodesource.com/node_8.x $(lsb_release -cs) main" > /etc/apt/sources.list.d/nodesource.list \
+ && echo "deb https://deb.nodesource.com/node_10.x $(lsb_release -cs) main" > /etc/apt/sources.list.d/nodesource.list \
  && curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
