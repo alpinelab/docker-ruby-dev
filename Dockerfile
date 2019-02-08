@@ -7,7 +7,7 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define dependencies base versions
-ENV NODEJS_VERSION="10.15.0" \
+ENV NODEJS_VERSION="10.15.1" \
     YARN_VERSION="1.12.3" \
     RUBYGEMS_VERSION="2.7.8" \
     GOSU_VERSION="1.11"
