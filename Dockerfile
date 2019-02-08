@@ -1,4 +1,4 @@
-FROM ruby:2.5
+FROM ruby:2.6
 
 LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 
