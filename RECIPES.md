@@ -309,6 +309,16 @@ services:
 
 It will be copied into the user's home directory before any command run into the container.
 
+> ⚠️ Look out if you commit from within the container, though: it [uses](https://github.com/alpinelab/docker-ruby-dev/blob/latest/Dockerfile) fake `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL` by default, which is probably not what you want. You may want to override them too, from `docker-compose.override.yml`:
+> ```yaml
+> version: "3"
+> services:
+>   app:
+>     environment:
+>       GIT_COMMITTER_NAME: "Your name"
+>       GIT_COMMITTER_EMAIL: "you@example.com"
+> ```
+
 ### RubyGems authentication
 
 If you want to build and publish gems from within the container (_e.g._ [using Bundler's `rake release` task](https://www.schneems.com/blogs/2016-03-18-bundler-release-tasks)), you may want to use your host's RubyGems credentials.
