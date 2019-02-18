@@ -9,7 +9,7 @@ ENV LANG="C.UTF-8"
 # Define dependencies base versions
 ENV NODEJS_VERSION="10.15.1" \
     YARN_VERSION="1.13.0" \
-    RUBYGEMS_VERSION="2.7.8" \
+    RUBYGEMS_VERSION="3.0.2" \
     GOSU_VERSION="1.11"
 
 # Define dependencies package-manager versions
