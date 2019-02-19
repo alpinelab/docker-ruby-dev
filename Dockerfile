@@ -10,6 +10,7 @@ ENV LANG="C.UTF-8"
 ENV NODEJS_VERSION="10.15.1" \
     YARN_VERSION="1.13.0" \
     RUBYGEMS_VERSION="3.0.2" \
+    BUNDLER_VERSION="1.17.3" \
     GOSU_VERSION="1.11"
 
 # Define dependencies package-manager versions
@@ -62,7 +63,8 @@ RUN export GNUPGHOME="$(mktemp -d)" dpkgArch="$(dpkg --print-architecture | cut 
  && rm -rf "${GNUPGHOME}"
 
 # Install GEM dependencies
-RUN gem update --system ${RUBYGEMS_VERSION}
+RUN gem update --system ${RUBYGEMS_VERSION} \
+ && gem install bundler:${BUNDLER_VERSION}
 
 # Add dot files to the home directory skeleton (they persist IRB/Pry/Rails console history, configure Yarn, etc…)
 COPY dotfiles/* /etc/skel/
