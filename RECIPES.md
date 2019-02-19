@@ -19,6 +19,9 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     * [Git authentication](#git-authentication)
     * [RubyGems authentication](#rubygems-authentication)
     * [Custom Yarn check command](#custom-yarn-check-command)
+  * [Operations](#operations)
+    * [Load a database dump](#load-a-database-dump)
+    * [Fetch and load a Heroku database](#fetch-and-load-a-heroku-database)
   * [Customisation](#customisation):
     * [capybara-webkit](#capybara-webkit)
     * [wkhtmltopdf](#wkhtmltopdf)
@@ -370,6 +373,33 @@ By default, we use `yarn check --integrity --verify-tree --silent` to check that
 ```
 
 This can be particularly useful with configurations like the one traditionally setup by [ReactOnRails](https://github.com/shakacode/react_on_rails), which combines a `package.json` in the `client/` sub-directory (for the actual client-side code) and another `package.json` in the Rails root (for development tools like linters or proxying Yarn scripts/commands to the `client/` sub-directory config).
+
+## Operations
+
+First of all, make sure your development database exists and is empty:
+
+```shell
+docker-compose run --entrypoint=bypass -e PGHOST=postgres -e PGUSER=postgres app dropdb app_development
+docker-compose run --entrypoint=bypass -e PGHOST=postgres -e PGUSER=postgres app createdb app_development
+```
+
+### Load a database dump
+
+To copy a database dump (_e.g._ `latest.dump`) to your local Postgres development database, use [`pg_restore`](https://www.postgresql.org/docs/current/app-pgrestore.html):
+
+```shell
+docker-compose run --entrypoint=bypass -e PGHOST=postgres -e PGUSER=postgres app pg_restore --verbose --clean --no-acl --no-owner -d app_development latest.dump
+```
+
+### Fetch and load a Heroku database
+
+To copy a Postgres database from Heroku to your local development environment (assuming you followed the Postgres config from the [using PostgreSQL](#using-postgresql) section), use [`heroku pg:pull`](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-pg-pull-source-target):
+
+```shell
+docker-compose run -e PGSSLMODE=prefer --entrypoint=bypass app heroku pg:pull DATABASE_URL postgres://postgres:@postgres/app_development -a your-heroku-app
+```
+
+> ℹ️ You need [Heroku CLI authentication](#heroku-cli-authentication) configured for this to work.
 
 ## Customisation
 
