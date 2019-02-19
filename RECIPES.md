@@ -295,7 +295,21 @@ An alternative but less secure approach would be to mount your host's `~/.netrc`
 
 ### Git authentication
 
-If you're using SSH as underlying Git protocol, you may want to use your host SSH authentication from within the container (to use `git` from there, for example).
+There are 2 methods to be able to pull private repositories from within the Docker container (there are other use-cases, but this one is the most frequent).
+
+> ⚠️ Look out if you commit from within the container, though: it [uses](https://github.com/alpinelab/docker-ruby-dev/blob/latest/Dockerfile) fake `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL` by default, which is probably not what you want. You may want to override them too, from `docker-compose.override.yml`:
+> ```yaml
+> version: "3"
+> services:
+>   app:
+>     environment:
+>       GIT_COMMITTER_NAME: "Your name"
+>       GIT_COMMITTER_EMAIL: "you@example.com"
+> ```
+
+#### For SSH repositories
+
+If you're using SSH as underlying Git protocol (_e.g._ your `Gemfile` uses URLs starting with `git@`), you may want to use your host SSH authentication from within the container.
 
 You can do it by mounting your host's `~/.ssh` to the container's `/etc/skel/.ssh` directory from `docker-compose.override.yml`:
 
@@ -309,15 +323,23 @@ services:
 
 It will be copied into the user's home directory before any command run into the container.
 
-> ⚠️ Look out if you commit from within the container, though: it [uses](https://github.com/alpinelab/docker-ruby-dev/blob/latest/Dockerfile) fake `GIT_COMMITTER_NAME` and `GIT_COMMITTER_EMAIL` by default, which is probably not what you want. You may want to override them too, from `docker-compose.override.yml`:
-> ```yaml
-> version: "3"
-> services:
->   app:
->     environment:
->       GIT_COMMITTER_NAME: "Your name"
->       GIT_COMMITTER_EMAIL: "you@example.com"
-> ```
+#### For HTTPS repositories
+
+If you're using HTTPS as underlying Git protocol (_e.g._ your `Gemfile` uses URLs starting with `https://`), you may want to pass your repository credentials to the container via the an environment variable:
+
+```yaml
+version: "3"
+services:
+  app:
+    environment:
+      BUNDLE_GITHUB__COM: 'USERNAME:PASSWORD' # if you do NOT use 2FA
+      BUNDLE_GITHUB__COM: 'PERSONAL_ACCESS_TOKEN:x-oauth-basic' # if you use 2FA
+```
+
+> ℹ️ This example works for repositories hosted on the `github.com` host name, but can be adapted to any host name (note the double-underscore between host name parts):
+> * `BUNDLE_BITBUCKET__ORG`
+> * `BUNDLE_GITLAB__COM` (the format is `oauth2:PERSONAL_TOKEN`, though)
+> * …
 
 ### RubyGems authentication
 
