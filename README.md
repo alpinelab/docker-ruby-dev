@@ -135,6 +135,14 @@ You can customise this image by **building your own image based on this one** (o
 
 A wild `node_modules` directory owned by `root` may appear in your codebase directory. This is due to Docker [creating the destination mount point](https://github.com/moby/moby/issues/26051) for the bind mount. It should be solved when we will be able to reliably configure Yarn to [use an absolute directory](https://github.com/alpinelab/docker-ruby-dev/issues/1) (instead of relative `node_modules`) outside of the codebase, like we do with Bundler.
 
+## Unmaintained versions
+
+The following Ruby versions are not maintained anymore:
+
+* Ruby 2.2
+
+You will still find images on [DockerHub](https://hub.docker.com/r/alpinelab/ruby-dev) tagged for these versions, but branches have been removed from this repository and new images for them are not automatically built anymore. Thus, they must be considered as obsolete 💀
+
 ## Contributing
 
 Contributions are indeed warmly welcome as [pull requests](https://github.com/alpinelab/docker-ruby-dev/pulls), or [issues](https://github.com/alpinelab/docker-ruby-dev/issues) ❤️
