@@ -7,15 +7,9 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define dependencies base versions
-ENV NODEJS_VERSION="10.15.1" \
-    YARN_VERSION="1.13.0" \
-    RUBYGEMS_VERSION="3.0.2" \
+ENV RUBYGEMS_VERSION="3.0.2" \
     BUNDLER_VERSION="1.17.3" \
     GOSU_VERSION="1.11"
-
-# Define dependencies package-manager versions
-ENV NODEJS_APT_VERSION="${NODEJS_VERSION}-1nodesource1" \
-    YARN_APT_VERSION="${YARN_VERSION}-1"
 
 # Define some default variables
 ENV PORT="5000" \
@@ -46,10 +40,10 @@ RUN apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       heroku \
       nano \
-      nodejs=${NODEJS_APT_VERSION} \
+      nodejs \
       postgresql-client-10 \
       vim \
-      yarn=${YARN_APT_VERSION} \
+      yarn \
  && rm -rf /var/lib/apt/lists/*
 
 # Install `gosu`
