@@ -139,9 +139,10 @@ A wild `node_modules` directory owned by `root` may appear in your codebase dire
 
 The following Ruby versions are not maintained anymore:
 
-* Ruby 2.2
+* Ruby 2.2 ([EOL](https://www.ruby-lang.org/en/news/2018/06/20/support-of-ruby-2-2-has-ended/)'d)
+* Ruby 2.3 ([EOL](https://www.ruby-lang.org/en/news/2019/03/31/support-of-ruby-2-3-has-ended/)'d)
 
-You will still find images on [DockerHub](https://hub.docker.com/r/alpinelab/ruby-dev) tagged for these versions, but branches have been removed from this repository and new images for them are not automatically built anymore. Thus, they must be considered as obsolete 💀
+You will still find images on [DockerHub](https://hub.docker.com/r/alpinelab/ruby-dev) tagged for these versions, but branches have been removed from the Git repository and new images for them are not automatically built anymore. Thus, they must be considered as obsolete 💀
 
 ## Contributing
 
