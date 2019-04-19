@@ -1,4 +1,6 @@
-FROM ruby:2.6
+ARG BASE_IMAGE_TAG=latest
+
+FROM ruby:${BASE_IMAGE_TAG}
 
 LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 
@@ -24,7 +26,8 @@ ENV PORT="5000" \
     DISABLE_SPRING="true"
 
 # Install APT dependencies
-RUN apt-get update \
+RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
+ && apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       apt-transport-https \
       lsb-release \

@@ -1,4 +1,4 @@
-# `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/)
+# `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) ![Travis build](https://img.shields.io/travis/alpinelab/docker-ruby-dev.svg?style=flat-square)
 
 The main goal of this project is to have a single Docker image to develop all your Ruby projects, with **all dependencies contained inside Docker** (like gems, NPM packages or even Ruby itself, that won't pollute your host environment) and without anything specific to the project in the Docker image (the **codebase is mounted directly from the host filesystem into the container**, thus you'll never have to build the image when you add a gem or change some code).
 
@@ -42,7 +42,7 @@ services:
       - config:/config
 ```
 
-> 💡 Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support multiple Ruby versions [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
+> 💡 Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support [multiple Ruby versions](.travis.yml) [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
 
 <details>
 
@@ -140,9 +140,6 @@ A wild `node_modules` directory owned by `root` may appear in your codebase dire
 The following Ruby versions are not maintained anymore:
 
 * Ruby 2.2 ([EOL](https://www.ruby-lang.org/en/news/2018/06/20/support-of-ruby-2-2-has-ended/)'d)
-* Ruby 2.3 ([EOL](https://www.ruby-lang.org/en/news/2019/03/31/support-of-ruby-2-3-has-ended/)'d)
-
-You will still find images on [DockerHub](https://hub.docker.com/r/alpinelab/ruby-dev) tagged for these versions, but branches have been removed from the Git repository and new images for them are not automatically built anymore. Thus, they must be considered as obsolete 💀
 
 ## Contributing
 

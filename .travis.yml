@@ -1,0 +1,46 @@
+language: generic
+
+services:
+  - docker
+
+env:
+  - RUBY_VERSION=2.6.2 ALIAS=2.6 LATEST=true
+  - RUBY_VERSION=2.6.1
+  - RUBY_VERSION=2.6.0
+  - RUBY_VERSION=2.5.5 ALIAS=2.5
+  - RUBY_VERSION=2.5.4
+  - RUBY_VERSION=2.5.3
+  # - RUBY_VERSION=2.5.2 # Base image has no such tag :-(
+  - RUBY_VERSION=2.5.1
+  - RUBY_VERSION=2.5.0
+  - RUBY_VERSION=2.4.6 ALIAS=2.4
+  - RUBY_VERSION=2.4.5
+  - RUBY_VERSION=2.4.4
+  - RUBY_VERSION=2.4.3
+  - RUBY_VERSION=2.4.2
+  - RUBY_VERSION=2.4.1
+  - RUBY_VERSION=2.4.0
+  - RUBY_VERSION=2.3.8 ALIAS=2.3
+  - RUBY_VERSION=2.3.7
+  - RUBY_VERSION=2.3.6
+  - RUBY_VERSION=2.3.5
+  - RUBY_VERSION=2.3.4
+  - RUBY_VERSION=2.3.3
+  - RUBY_VERSION=2.3.2
+  - RUBY_VERSION=2.3.1
+  - RUBY_VERSION=2.3.0
+
+script:
+  - docker build .
+      --build-arg BASE_IMAGE_TAG=${RUBY_VERSION}
+      --tag alpinelab/ruby-dev:${RUBY_VERSION}
+      ${ALIAS:+--tag alpinelab/ruby-dev:${ALIAS}}
+      ${LATEST:+--tag alpinelab/ruby-dev:latest}
+  - if [[ ${TRAVIS_BRANCH} = "master" && -z ${TRAVIS_PULL_REQUEST_BRANCH} ]]; then
+      echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin;
+      [[ -n ${ALIAS} ]] && docker push alpinelab/ruby-dev:${ALIAS} || echo "No alias to push";
+      [[ -n ${LATEST} ]] && docker push alpinelab/ruby-dev:latest || echo "Not the latest version";
+      docker push alpinelab/ruby-dev:${RUBY_VERSION};
+    else
+      echo "This is not a commit on master. Not pushing the built image anywhere.";
+    fi
