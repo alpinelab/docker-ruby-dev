@@ -111,6 +111,8 @@ services:
       - .:/app
       - bundle:/bundle
       - config:/config
+    environment:
+      DATABASE_URL: "postgres://postgres:@postgres:5432"
     links:
       - postgres
   postgres:
@@ -136,6 +138,13 @@ Here is what it does:
         - postgres-data:/var/lib/postgresql/data
     ```
 
+* set fully qualified `DATABASE_URL` except database name (because it will differ in `development` and `test` environments):
+
+    ```yaml
+    environment:
+      DATABASE_URL: "postgres://postgres:@postgres:5432"
+    ```
+
 * link this server to the application service (`app`), so it will be started whenever it's needed and it can be accessed inside Docker network by its name (`postgres`):
 
     ```yaml
@@ -149,10 +158,8 @@ From within the Ruby application, the Postgres server is accessible at the fully
 default: &default
   adapter: postgresql
   encoding: unicode
-  host: postgres
-  port: 5432
-  username: postgres
-  password:
+  url: <%= ENV["DATABASE_URL"] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
 development:
   <<: *default
@@ -164,10 +171,11 @@ test:
 
 production:
   <<: *default
-  database: app_production
 ```
 
 > ℹ️ There is almost no risk of database name collision with other projects of yours since Docker Compose will create a different volume for each different `docker-compose.yml` file, hence the very generic database names used here.
+
+> ℹ️ We explicitly set database names for `development` and `test` environments, since it is not defined in the fully-qualified URL provided by `docker-compose.yml`. In production, the URL provided will include the database name, thus we do not need (and do not want!) to explicitly set it here.
 
 ### Using PGAdmin
 
