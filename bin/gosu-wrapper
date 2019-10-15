@@ -2,20 +2,24 @@
 
 export APP_USER_NAME="user"
 
-groupadd                           \
-  --gid $(stat --format '%g' /app) \
-  --non-unique                     \
-  ${APP_USER_NAME}
+if ! grep -q "^${APP_USER_NAME}:" /etc/group; then
+  groupadd                           \
+    --gid $(stat --format '%g' /app) \
+    --non-unique                     \
+    ${APP_USER_NAME}
+fi
 
-useradd                            \
-  --shell "/bin/bash"              \
-  --uid $(stat --format '%u' /app) \
-  --gid $(stat --format '%g' /app) \
-  --no-user-group                  \
-  --comment "Docker Ruby dev <3"   \
-  --non-unique                     \
-  --create-home                    \
-  ${APP_USER_NAME}
+if ! grep -q "^${APP_USER_NAME}:" /etc/passwd; then
+  useradd                            \
+    --shell "/bin/bash"              \
+    --uid $(stat --format '%u' /app) \
+    --gid $(stat --format '%g' /app) \
+    --no-user-group                  \
+    --comment "Docker Ruby dev <3"   \
+    --non-unique                     \
+    --create-home                    \
+    ${APP_USER_NAME}
+fi
 
 chown --silent --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
   /bundle                                                    \
