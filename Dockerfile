@@ -75,7 +75,7 @@ EXPOSE ${PORT}
 # Use wrappers that check and maintain Ruby & JS dependencies (if necessary) as entrypoint
 COPY bin/* /usr/local/bin/
 RUN ln -s /usr/local/bin/gosu-wrapper /usr/local/bin/bypass
-ENTRYPOINT ["gosu-wrapper", "bundler-wrapper", "yarn-wrapper"]
+ENTRYPOINT ["gosu-wrapper", "bundler-wrapper", "yarn-wrapper", "rails-wrapper"]
 
 # The main command to run when the container starts is to start whatever the Procfile defines
 CMD ["foreman", "start"]
