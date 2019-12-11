@@ -6,7 +6,7 @@ if ! grep -q "^${APP_USER_NAME}:" /etc/group; then
   groupadd                           \
     --gid $(stat --format '%g' /app) \
     --non-unique                     \
-    ${APP_USER_NAME}
+    ${APP_USER_NAME} &> /dev/null
 fi
 
 if ! grep -q "^${APP_USER_NAME}:" /etc/passwd; then
@@ -18,7 +18,7 @@ if ! grep -q "^${APP_USER_NAME}:" /etc/passwd; then
     --comment "Docker Ruby dev <3"   \
     --non-unique                     \
     --create-home                    \
-    ${APP_USER_NAME}
+    ${APP_USER_NAME} &> /dev/null
 fi
 
 chown --silent --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
