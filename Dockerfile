@@ -9,8 +9,8 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define dependencies base versions
-ENV RUBYGEMS_VERSION="3.0.6" \
-    BUNDLER_VERSION="1.17.3" \
+ENV RUBYGEMS_VERSION="3.1.2" \
+    BUNDLER_VERSION="2.1.4" \
     GOSU_VERSION="1.11"
 
 # Define some default variables

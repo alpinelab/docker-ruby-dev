@@ -9,7 +9,7 @@ if [ -f Gemfile ]; then
   else
     echo "Something is missing 💥"
     echo "Updating bundle now…"
-    bundle install --jobs 20 --retry 5 --clean
+    BUNDLE_CLEAN=true bundle install --jobs 20 --retry 5
   fi
 else
   echo "No Gemfile found. Skipping Ruby dependencies check."
