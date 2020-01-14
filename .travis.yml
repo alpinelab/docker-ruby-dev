@@ -4,7 +4,8 @@ services:
   - docker
 
 env:
-  - RUBY_VERSION=2.6.5 ALIAS=2.6 LATEST=true
+  - RUBY_VERSION=2.7.0 ALIAS=2.7 LATEST=true
+  - RUBY_VERSION=2.6.5 ALIAS=2.6
   - RUBY_VERSION=2.6.4
   - RUBY_VERSION=2.6.3
   - RUBY_VERSION=2.6.2
