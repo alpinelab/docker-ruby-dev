@@ -60,8 +60,10 @@ RUN export GNUPGHOME="$(mktemp -d)" dpkgArch="$(dpkg --print-architecture | cut 
  && rm -rf "${GNUPGHOME}"
 
 # Install GEM dependencies
+# Note: we still need Bundler 1.x because Bundler auto-switches to it when it encounters a Gemfile.lock with BUNDLED WITH 1.x
 RUN gem update --system ${RUBYGEMS_VERSION} \
- && gem install bundler:${BUNDLER_VERSION}
+ && gem install bundler:${BUNDLER_VERSION} \
+ && gem install bundler:1.17.3
 
 # Add dot files to the home directory skeleton (they persist IRB/Pry/Rails console history, configure Yarn, etc…)
 COPY dotfiles/* /etc/skel/
