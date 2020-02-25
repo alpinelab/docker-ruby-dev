@@ -113,23 +113,31 @@ You can customise this image by **building your own image based on this one** (o
       ```
 
   2. change your `docker-compose.yml` to use this `Dockerfile` (rather than an upstream image) and to build it on-demand:
-    * change this line:
 
-        ```yaml
-        image: alpinelab/ruby-dev
-        ```
+      * change this line:
 
-    * into this line:
+          ```yaml
+          image: alpinelab/ruby-dev
+          ```
 
-        ```yaml
-        build: .
-        ```
+      * into this line:
 
-> ℹ️ To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply run the following command from a shell inside the container:
+          ```yaml
+          build: .
+          ```
+
+> ℹ️ To **temporarily** install a package inside the container (_e.g._ for a one-time debugging session), you can simply:
 >
-> ```shell
-> apt-get update && apt-get install <your_package>
-> ```
+> 1. Run a shell as root in the container (notice the empty entrypoint):
+>
+>     ```shell
+>     docker-compose run --entrypoint= app bash
+>     ```
+>
+> 2. Install the pakckage using APT (any change will be undone when you close the shell):
+>     ```shell
+>     apt-get update && apt-get install <your_package>
+>     ```
 
 ## Known issues
 
