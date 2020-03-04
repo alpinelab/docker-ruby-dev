@@ -112,13 +112,15 @@ services:
       - bundle:/bundle
       - config:/config
     environment:
-      DATABASE_URL: "postgres://postgres:@postgres:5432"
+      DATABASE_URL: "postgres://postgres:password@postgres:5432"
     links:
       - postgres
   postgres:
     image: postgres
     volumes:
       - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
 ```
 
 Here is what it does:
@@ -136,13 +138,15 @@ Here is what it does:
       image: postgres
       volumes:
         - postgres-data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_PASSWORD: password
     ```
 
 * set fully qualified `DATABASE_URL` except database name (because it will differ in `development` and `test` environments):
 
     ```yaml
     environment:
-      DATABASE_URL: "postgres://postgres:@postgres:5432"
+      DATABASE_URL: "postgres://postgres:password@postgres:5432"
     ```
 
 * link this server to the application service (`app`), so it will be started whenever it's needed and it can be accessed inside Docker network by its name (`postgres`):
