@@ -80,4 +80,4 @@ RUN ln -s /usr/local/bin/gosu-wrapper /usr/local/bin/bypass
 ENTRYPOINT ["gosu-wrapper", "bundler-wrapper", "yarn-wrapper", "rails-wrapper"]
 
 # The main command to run when the container starts is to start whatever the Procfile defines
-CMD ["foreman", "start"]
+CMD ["foreman", "start", "-m", "all=1,release=0"]
