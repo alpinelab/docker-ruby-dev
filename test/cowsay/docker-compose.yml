@@ -11,3 +11,4 @@ services:
       - bundle:/bundle
       - node_modules:/app/node_modules
       - config:/config
+    command: ["cat", "README.md"]

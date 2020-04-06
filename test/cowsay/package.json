@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "cowsay": "^1.2.1"
-  }
+    "cowsay": "~1.2"
+  },
+  "license": "MIT"
 }
