@@ -44,7 +44,7 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       heroku \
       nano \
       nodejs \
-      postgresql-client-10 \
+      postgresql-client \
       vim \
       yarn \
  && rm -rf /var/lib/apt/lists/*
