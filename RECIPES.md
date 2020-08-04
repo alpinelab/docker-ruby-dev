@@ -12,6 +12,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     * [creating a Rails application from scratch](#creating-a-rails-application-from-scratch)
     * [creating a gem from scratch](#creating-a-gem-from-scratch)
     * [using PostgreSQL](#using-postgresql)
+    * [using Webpacker](#using-webpacker)
     * [using PGAdmin](#using-pgadmin)
     * [using MailCatcher](#using-mailcatcher)
   * [Configuration](#configuration):
@@ -93,6 +94,47 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     ```shell
     docker-compose run app bash -c "ln -s . my_project && bundle gem my_project && rm my_project"
     ```
+
+### Using Webpacker
+
+This is a minimal `docker-compose.yml` for a Rails application that uses [Webpacker](https://github.com/rails/webpacker):
+
+```yaml
+version: "3"
+volumes:
+  bundle: { driver: local }
+  node_modules: { driver: local }
+  config: { driver: local }
+services:
+  app:
+    image: alpinelab/ruby-dev
+    ports: ["5000:5000", "3035:3035"]
+    volumes:
+      - .:/app
+      - bundle:/bundle
+      - node_modules:/app/node_modules
+      - config:/config
+    environment:
+      PORT: 3000
+      WEBPACKER_DEV_SERVER_HOST: "0.0.0.0"
+```
+
+The important parts are:
+* add `3035` to the `ports` exposed (it's used for `webpack-dev-server` websocket connection)
+* add `WEBPACKER_DEV_SERVER_HOST: "0.0.0.0"` to `environment` variables to tell `webpack-dev-server` to bind on all interfaces (not only `localhost`)
+
+Then, add a `Procfile.dev` file to start `webpack-dev-server` automatically:
+
+```Procfile
+web: bin/rails server -b 0.0.0.0 -p ${PORT:-5000}
+webpack: bin/webpack-dev-server
+```
+
+Finally, add a `.foreman` fill to tell `foreman` to use your newly created `Procfile.dev` (without messing up with your production `Procfile`):
+
+```
+procfile: Procfile.dev
+```
 
 ### Using PostgreSQL
 
