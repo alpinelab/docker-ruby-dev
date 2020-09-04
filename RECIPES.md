@@ -20,6 +20,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     * [Git authentication](#git-authentication)
     * [RubyGems authentication](#rubygems-authentication)
     * [Custom Yarn check command](#custom-yarn-check-command)
+    * [Bundler 1.x](#bundler-1.x)
   * [Operations](#operations)
     * [Load a database dump](#load-a-database-dump)
     * [Fetch and load a Heroku database](#fetch-and-load-a-heroku-database)
@@ -427,6 +428,19 @@ By default, we use `yarn check --integrity --verify-tree --silent` to check that
 ```
 
 This can be particularly useful with configurations like the one traditionally setup by [ReactOnRails](https://github.com/shakacode/react_on_rails), which combines a `package.json` in the `client/` sub-directory (for the actual client-side code) and another `package.json` in the Rails root (for development tools like linters or proxying Yarn scripts/commands to the `client/` sub-directory config).
+
+### Bundler 1.x
+
+Our image uses Bundler 2.x by default, but for convenience, it also embeds Bundler 1.x. To use it in your legacy project, simply set the `BUNDLER_VERSION` environment variable from your `docker-compose.yml`:
+
+```yaml
+services:
+  app:
+    environment:
+      BUNDLER_VERSION: "1.17.3"
+```
+
+> :warning: We may bump Bundler 1.x exact version number in the future if a new version is released (and forget to update this very documentation :grimacing:). Make sure you are setting the correct version number by checking which Bundler versions are available in your container image by running `gem list bundler`.
 
 ## Operations
 
