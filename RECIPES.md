@@ -20,7 +20,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
     * [Git authentication](#git-authentication)
     * [RubyGems authentication](#rubygems-authentication)
     * [Custom Yarn check command](#custom-yarn-check-command)
-    * [Bundler 1.x](#bundler-1.x)
+    * [Bundler 1.x](#bundler-1x)
   * [Operations](#operations)
     * [Load a database dump](#load-a-database-dump)
     * [Fetch and load a Heroku database](#fetch-and-load-a-heroku-database)
