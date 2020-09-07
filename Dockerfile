@@ -42,6 +42,7 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
  && apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       heroku \
+      jq \
       nano \
       nodejs \
       postgresql-client \
