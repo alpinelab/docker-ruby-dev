@@ -9,9 +9,10 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 ENV LANG="C.UTF-8"
 
 # Define dependencies base versions
-ENV RUBYGEMS_VERSION="3.1.2" \
+ENV RUBYGEMS_VERSION="3.1.4" \
     BUNDLER_VERSION="2.1.4" \
-    GOSU_VERSION="1.11"
+    NODE_VERSION="14" \
+    GOSU_VERSION="1.12"
 
 # Define some default variables
 ENV PORT="5000" \
@@ -33,7 +34,7 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       lsb-release \
  && echo "deb https://apt.postgresql.org/pub/repos/apt/ $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list \
  && curl --silent https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
- && echo "deb https://deb.nodesource.com/node_10.x $(lsb_release -cs) main" > /etc/apt/sources.list.d/nodesource.list \
+ && echo "deb https://deb.nodesource.com/node_${NODE_VERSION}.x $(lsb_release -cs) main" > /etc/apt/sources.list.d/nodesource.list \
  && curl -s https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - \
  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
  && curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
