@@ -464,7 +464,7 @@ docker-compose run --entrypoint=bypass -e PGHOST=postgres -e PGUSER=postgres app
 To copy a Postgres database from Heroku to your local development environment (assuming you followed the Postgres config from the [using PostgreSQL](#using-postgresql) section), use [`heroku pg:pull`](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-pg-pull-source-target):
 
 ```shell
-docker-compose run -e PGSSLMODE=prefer --entrypoint=bypass app heroku pg:pull DATABASE_URL postgres://postgres:@postgres/app_development -a your-heroku-app
+docker-compose run -e PGSSLMODE=prefer --entrypoint=bypass app heroku pg:pull DATABASE_URL postgres://postgres:password@postgres/app_development -a your-heroku-app
 ```
 
 > ℹ️ You need [Heroku CLI authentication](#heroku-cli-authentication) configured for this to work.
