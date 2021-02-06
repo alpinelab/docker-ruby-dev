@@ -45,6 +45,9 @@ env:
   - RUBY_VERSION=2.3.1
   - RUBY_VERSION=2.3.0
 
+before_script:
+  - echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin
+
 script:
   - docker build .
       --build-arg BASE_IMAGE_TAG=${RUBY_VERSION}
@@ -52,7 +55,6 @@ script:
       ${ALIAS:+--tag alpinelab/ruby-dev:${ALIAS}}
       ${LATEST:+--tag alpinelab/ruby-dev:latest}
   - if [[ ${TRAVIS_BRANCH} = "master" && -z ${TRAVIS_PULL_REQUEST_BRANCH} ]]; then
-      echo "${DOCKER_PASSWORD}" | docker login --username "${DOCKER_USER}" --password-stdin;
       [[ -n ${ALIAS} ]] && docker push alpinelab/ruby-dev:${ALIAS} || echo "No alias to push";
       [[ -n ${LATEST} ]] && docker push alpinelab/ruby-dev:latest || echo "Not the latest version";
       docker push alpinelab/ruby-dev:${RUBY_VERSION};
