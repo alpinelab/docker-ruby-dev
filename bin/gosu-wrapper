@@ -21,9 +21,11 @@ if ! grep -q "^${APP_USER_NAME}:" /etc/passwd; then
     ${APP_USER_NAME} &> /dev/null
 fi
 
+node_modules_path=$(grep node_modules /etc/mtab | cut -d' ' -f2)
+
 chown --silent --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
   /bundle                                                    \
   /config                                                    \
-  /app/node_modules
+  ${node_modules_path}
 
 gosu ${APP_USER_NAME} "$@"
