@@ -11,7 +11,7 @@ ENV LANG="C.UTF-8"
 # Define dependencies base versions
 ENV RUBYGEMS_VERSION="3.2.26" \
     BUNDLER_VERSION="2.2.26" \
-    NODE_VERSION="16" \
+    NODE_VERSION="15" \
     GOSU_VERSION="1.14"
 
 # Define some default variables
