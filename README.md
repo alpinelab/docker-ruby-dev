@@ -153,8 +153,6 @@ The following Ruby versions are not maintained anymore:
 
 Contributions are indeed warmly welcome as [pull requests](https://github.com/alpinelab/docker-ruby-dev/pulls), or [issues](https://github.com/alpinelab/docker-ruby-dev/issues) ❤️
 
-There's also a handy [`add-ruby-version-support.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/add-ruby-version-support.sh) script to add support for a Ruby version and another handy [`rebase-all.sh`](https://github.com/alpinelab/docker-ruby-dev/blob/latest/rebase-all.sh) script to apply a change made on `latest` branch to all other branches.
-
 ## License
 
 This project is developed by [Alpine Lab](https://www.alpine-lab.com) and released under the terms of the [MIT license](LICENSE.md).
