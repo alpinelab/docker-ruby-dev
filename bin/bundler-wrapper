@@ -1,7 +1,5 @@
 #!/bin/bash
 
-which foreman > /dev/null || gem install --silent foreman
-
 if [ -f Gemfile ]; then
   echo -n "Checking bundle... "
   if $(bundle check &> /dev/null); then
