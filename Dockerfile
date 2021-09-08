@@ -83,7 +83,6 @@ EXPOSE ${PORT}
 
 # Use entrypoints that switch to unprivileged user, install foreman, install dependencies (bundler & yarn), and fix a Rails server issue
 COPY entrypoints/* /usr/local/bin/
-RUN ln -s /usr/local/bin/gosu-entrypoint /usr/local/bin/bypass
 ENTRYPOINT ["gosu-entrypoint", "foreman-entrypoint", "bundler-entrypoint", "yarn-entrypoint", "rails-entrypoint"]
 
 # The main command to run when the container starts is to start whatever the Procfile defines
