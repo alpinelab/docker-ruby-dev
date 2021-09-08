@@ -81,10 +81,10 @@ WORKDIR /app
 # Expose listening port to the Docker host, so we can access it from the outside.
 EXPOSE ${PORT}
 
-# Use wrappers that check and maintain Ruby & JS dependencies (if necessary) as entrypoint
-COPY bin/* /usr/local/bin/
-RUN ln -s /usr/local/bin/gosu-wrapper /usr/local/bin/bypass
-ENTRYPOINT ["gosu-wrapper", "foreman-wrapper", "bundler-wrapper", "yarn-wrapper", "rails-wrapper"]
+# Use entrypoints that switch to unprivileged user, install foreman, install dependencies (bundler & yarn), and fix a Rails server issue
+COPY entrypoints/* /usr/local/bin/
+RUN ln -s /usr/local/bin/gosu-entrypoint /usr/local/bin/bypass
+ENTRYPOINT ["gosu-entrypoint", "foreman-entrypoint", "bundler-entrypoint", "yarn-entrypoint", "rails-entrypoint"]
 
 # The main command to run when the container starts is to start whatever the Procfile defines
 CMD ["foreman", "start", "-m", "all=1,release=0"]
