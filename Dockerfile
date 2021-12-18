@@ -34,6 +34,15 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       lsb-release \
  && releaseCodename=$(lsb_release -cs) \
  && if [ "${releaseCodename}" = "jessie" ]; then \
+      apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+        ca-certificates \
+        curl \
+        libssl1.0.0 \
+      && sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf \
+      && update-ca-certificates; \
+    fi \
+ \
+ && if [ "${releaseCodename}" = "jessie" ]; then \
       echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${releaseCodename}-pgdg-archive main" > /etc/apt/sources.list.d/pgdg.list; \
     else \
       echo "deb https://apt.postgresql.org/pub/repos/apt/ ${releaseCodename}-pgdg main" > /etc/apt/sources.list.d/pgdg.list; \
