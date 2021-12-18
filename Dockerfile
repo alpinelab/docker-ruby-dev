@@ -32,8 +32,9 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       apt-transport-https \
       lsb-release \
- && releaseCodename=$(lsb_release -cs) \
- && if [ "${releaseCodename}" = "jessie" ]; then \
+ && debianReleaseCodename=$(lsb_release -cs) \
+ \
+ && if [ "${debianReleaseCodename}" = "jessie" ]; then \
       apt-get install --assume-yes --no-install-recommends --no-install-suggests \
         ca-certificates \
         curl \
@@ -41,18 +42,23 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       && sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf \
       && update-ca-certificates; \
     fi \
+ \
  && curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
- && if [ "${releaseCodename}" = "jessie" ]; then \
-      echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${releaseCodename}-pgdg-archive main" > /etc/apt/sources.list.d/pgdg.list; \
+ && if [ "${debianReleaseCodename}" = "jessie" ]; then \
+      echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" > /etc/apt/sources.list.d/pgdg.list; \
     else \
-      echo "deb https://apt.postgresql.org/pub/repos/apt/ ${releaseCodename}-pgdg main" > /etc/apt/sources.list.d/pgdg.list; \
+      echo "deb https://apt.postgresql.org/pub/repos/apt/ ${debianReleaseCodename}-pgdg main" > /etc/apt/sources.list.d/pgdg.list; \
     fi \
+ \
  && curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.nodesource.com.gpg \
- && echo "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${releaseCodename} main" > /etc/apt/sources.list.d/nodesource.list \
+ && echo "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${debianReleaseCodename} main" > /etc/apt/sources.list.d/nodesource.list \
+ \
  && curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.yarnpkg.com.gpg \
  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
+ \
  && curl -sSL https://cli-assets.heroku.com/apt/release.key | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.heroku.com.gpg \
  && echo "deb https://cli-assets.heroku.com/branches/stable/apt ./" > /etc/apt/sources.list.d/heroku.list \
+ \
  && apt-get update \
  && apt-get install --assume-yes --no-install-recommends --no-install-suggests \
       heroku \
@@ -62,6 +68,7 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       postgresql-client \
       vim \
       yarn \
+ \
  && rm -rf /var/lib/apt/lists/*
 
 # Install `gosu`
