@@ -11,7 +11,7 @@ ENV LANG="C.UTF-8"
 # Define dependencies base versions
 ENV RUBYGEMS_VERSION="3.2.33" \
     BUNDLER_VERSION="2.2.33" \
-    NODE_VERSION="15" \
+    NODE_VERSION="16" \
     GOSU_VERSION="1.14"
 
 # Define some default variables
@@ -44,14 +44,16 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
     ;; esac \
  \
  && curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
- && if [ "${debianReleaseCodename}" = "jessie" ]; then \
-      echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" > /etc/apt/sources.list.d/pgdg.list; \
-    else \
-      echo "deb https://apt.postgresql.org/pub/repos/apt/ ${debianReleaseCodename}-pgdg main" > /etc/apt/sources.list.d/pgdg.list; \
-    fi \
+ && case "${debianReleaseCodename}" in \
+      jessie) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
+      *) echo "deb https://apt.postgresql.org/pub/repos/apt/ ${debianReleaseCodename}-pgdg main" ;; \
+    esac > /etc/apt/sources.list.d/pgdg.list \
  \
  && curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.nodesource.com.gpg \
- && echo "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${debianReleaseCodename} main" > /etc/apt/sources.list.d/nodesource.list \
+ && case "${debianReleaseCodename}" in \
+      jessie) echo "deb https://deb.nodesource.com/node_14.x ${debianReleaseCodename} main" ;; \
+      *) echo "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${debianReleaseCodename} main" ;; \
+    esac > /etc/apt/sources.list.d/nodesource.list \
  \
  && curl -sSL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.yarnpkg.com.gpg \
  && echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list \
