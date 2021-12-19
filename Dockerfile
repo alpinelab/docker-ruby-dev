@@ -34,11 +34,11 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       lsb-release \
  && debianReleaseCodename=$(lsb_release -cs) \
  \
- && if [ "${debianReleaseCodename}" = "jessie" ]; then \
+ && if [ "${debianReleaseCodename}" = "jessie" -o "${debianReleaseCodename}" = "buster" ]; then \
       apt-get install --assume-yes --no-install-recommends --no-install-suggests \
         ca-certificates \
         curl \
-        libssl1.0.0 \
+        $([ "${debianReleaseCodename}" = "jessie" ] && echo libssl1.0.0) \
       && sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf \
       && update-ca-certificates; \
     fi \
