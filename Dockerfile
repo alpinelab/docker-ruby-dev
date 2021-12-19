@@ -34,14 +34,14 @@ RUN sed -i '/jessie-updates/d' /etc/apt/sources.list \
       lsb-release \
  && debianReleaseCodename=$(lsb_release -cs) \
  \
- && if [ "${debianReleaseCodename}" = "jessie" -o "${debianReleaseCodename}" = "buster" ]; then \
+ && case "${debianReleaseCodename}" in jessie|buster|stretch) \
       apt-get install --assume-yes --no-install-recommends --no-install-suggests \
         ca-certificates \
         curl \
         $([ "${debianReleaseCodename}" = "jessie" ] && echo libssl1.0.0) \
       && sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf \
       && update-ca-certificates; \
-    fi \
+    ;; esac \
  \
  && curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg \
  && if [ "${debianReleaseCodename}" = "jessie" ]; then \
