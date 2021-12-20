@@ -10,6 +10,12 @@ before_script:
 
 script: ./build.sh
 
+deploy:
+  provider: script
+  script: ./publish.sh
+  on:
+    branch: master
+
 env:
   global:
     - DOCKER_BUILDKIT=1
