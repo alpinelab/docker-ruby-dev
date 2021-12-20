@@ -1,31 +1,56 @@
-#!/bin/bash
+#!/bin/sh
+
+if ! mountpoint -q /app; then
+  exec "$@"
+  exit 0
+fi
 
 export APP_USER_NAME="user"
+export APP_USER_UID="$(stat -c '%u' /app)"
+export APP_USER_GID="$(stat -c '%g' /app)"
 
 if ! grep -q "^${APP_USER_NAME}:" /etc/group; then
-  groupadd                           \
-    --gid $(stat --format '%g' /app) \
-    --non-unique                     \
-    ${APP_USER_NAME} &> /dev/null
+
+  # Create group
+  case "$(sed -n 's|^ID=||p' /etc/os-release)" in
+    alpine)
+      addgroup -g ${APP_USER_GID} ${APP_USER_NAME}
+    ;;
+    debian|ubuntu)
+      groupadd \
+        --gid ${APP_USER_GID} \
+        --non-unique \
+        ${APP_USER_NAME}
+    ;;
+  esac
 fi
 
 if ! grep -q "^${APP_USER_NAME}:" /etc/passwd; then
-  useradd                            \
-    --shell "/bin/bash"              \
-    --uid $(stat --format '%u' /app) \
-    --gid $(stat --format '%g' /app) \
-    --no-user-group                  \
-    --comment "Docker Ruby dev <3"   \
-    --non-unique                     \
-    --create-home                    \
-    ${APP_USER_NAME} &> /dev/null
+
+  # Create user
+  case "$(sed -n 's|^ID=||p' /etc/os-release)" in
+    alpine)
+      adduser -D -u ${APP_USER_UID} -G ${APP_USER_NAME} ${APP_USER_NAME}
+    ;;
+    debian|ubuntu)
+      useradd \
+        --shell "/bin/bash" \
+        --uid ${APP_USER_UID} \
+        --gid ${APP_USER_GID} \
+        --no-user-group \
+        --non-unique \
+        --create-home \
+        ${APP_USER_NAME}
+    ;;
+  esac
 fi
 
-node_modules_path=$(grep node_modules /etc/mtab | cut -d' ' -f2)
+node_modules_mountpoint=$(grep node_modules /etc/mtab | cut -d' ' -f2)
 
-chown --silent --recursive ${APP_USER_NAME}:${APP_USER_NAME} \
-  /bundle                                                    \
-  /config                                                    \
-  ${node_modules_path}
+# Change ownership (this may take a few seconds, but only the first time)
+chown -Rf ${APP_USER_NAME}:${APP_USER_NAME} \
+  /bundle \
+  /config \
+  ${node_modules_mountpoint}
 
 gosu ${APP_USER_NAME} "$@"

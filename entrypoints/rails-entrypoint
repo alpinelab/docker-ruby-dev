@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Remove rails server PID file, that is sometimes not properly removed at shutdown
 # as instructed in https://docs.docker.com/compose/rails/
