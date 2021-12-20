@@ -1,5 +1,5 @@
-#!/bin/bash
+#!/bin/sh
 
-which foreman > /dev/null || gem install --silent foreman
+command -v foreman > /dev/null || gem install --silent foreman
 
 exec "$@"

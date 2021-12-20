@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # Skip this entrypoint if `DISABLE_AUTO_INSTALL_DEPS` is set
 if [ "${DISABLE_AUTO_INSTALL_DEPS}" = "1" ]; then
