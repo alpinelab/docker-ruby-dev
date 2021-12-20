@@ -6,8 +6,8 @@ if ! mountpoint -q /app; then
 fi
 
 export APP_USER_NAME="user"
-export APP_USER_UID="$(stat -c '%u' /app)"
-export APP_USER_GID="$(stat -c '%g' /app)"
+export APP_USER_UID="${GOSU_FORCE_UID:-$(stat -c '%u' /app)}"
+export APP_USER_GID="${GOSU_FORCE_GID:-$(stat -c '%g' /app)}"
 
 if ! grep -q "^${APP_USER_NAME}:" /etc/group; then
 
@@ -45,12 +45,15 @@ if ! grep -q "^${APP_USER_NAME}:" /etc/passwd; then
   esac
 fi
 
+eval ${GOSU_PRE_CHOWN_CMD}
+
 node_modules_mountpoint=$(grep node_modules /etc/mtab | cut -d' ' -f2)
 
 # Change ownership (this may take a few seconds, but only the first time)
 chown -Rf ${APP_USER_NAME}:${APP_USER_NAME} \
   /bundle \
   /config \
-  ${node_modules_mountpoint}
+  ${node_modules_mountpoint} \
+  ${GOSU_ADDITIONAL_CHOWN_TARGETS}
 
 gosu ${APP_USER_NAME} "$@"
