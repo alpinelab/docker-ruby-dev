@@ -20,94 +20,94 @@ env:
   global:
     - DOCKER_BUILDKIT=1
   jobs:
-    - RUBY_VERSION=3.0.3        ALIAS=3.0,latest
-    - RUBY_VERSION=3.0.3-alpine ALIAS=3.0-alpine,alpine
-    - RUBY_VERSION=3.0.2
-    - RUBY_VERSION=3.0.2-alpine
-    - RUBY_VERSION=3.0.1
-    - RUBY_VERSION=3.0.1-alpine
-    - RUBY_VERSION=3.0.0
-    - RUBY_VERSION=3.0.0-alpine
-    - RUBY_VERSION=2.7.5        ALIAS=2.7
-    - RUBY_VERSION=2.7.5-alpine ALIAS=2.7-alpine
-    - RUBY_VERSION=2.7.4
-    - RUBY_VERSION=2.7.4-alpine
-    - RUBY_VERSION=2.7.3
-    - RUBY_VERSION=2.7.3-alpine
-    - RUBY_VERSION=2.7.2
-    - RUBY_VERSION=2.7.2-alpine
-    - RUBY_VERSION=2.7.1
-    - RUBY_VERSION=2.7.1-alpine
-    - RUBY_VERSION=2.7.0
-    - RUBY_VERSION=2.7.0-alpine
-    - RUBY_VERSION=2.6.9        ALIAS=2.6
-    - RUBY_VERSION=2.6.9-alpine ALIAS=2.6-alpine
-    - RUBY_VERSION=2.6.8
-    - RUBY_VERSION=2.6.8-alpine
-    - RUBY_VERSION=2.6.7
-    - RUBY_VERSION=2.6.7-alpine
-    - RUBY_VERSION=2.6.6
-    - RUBY_VERSION=2.6.6-alpine
-    - RUBY_VERSION=2.6.5
-    - RUBY_VERSION=2.6.5-alpine
-    - RUBY_VERSION=2.6.4
-    - RUBY_VERSION=2.6.4-alpine
-    - RUBY_VERSION=2.6.3
-    - RUBY_VERSION=2.6.3-alpine
-    - RUBY_VERSION=2.6.2
-    - RUBY_VERSION=2.6.2-alpine
-    - RUBY_VERSION=2.6.1
-    - RUBY_VERSION=2.6.1-alpine
-    - RUBY_VERSION=2.6.0
-    - RUBY_VERSION=2.6.0-alpine
-    - RUBY_VERSION=2.5.9        ALIAS=2.5
-    - RUBY_VERSION=2.5.9-alpine ALIAS=2.5-alpine
-    - RUBY_VERSION=2.5.8
-    - RUBY_VERSION=2.5.8-alpine
-    - RUBY_VERSION=2.5.7
-    - RUBY_VERSION=2.5.7-alpine
-    - RUBY_VERSION=2.5.6
-    - RUBY_VERSION=2.5.6-alpine
-    - RUBY_VERSION=2.5.5
-    - RUBY_VERSION=2.5.5-alpine
-    - RUBY_VERSION=2.5.4
-    - RUBY_VERSION=2.5.4-alpine
-    - RUBY_VERSION=2.5.3
-    - RUBY_VERSION=2.5.3-alpine
-    # Ruby 2.5.2 never existed: it was mis-packaged and 2.5.3 was released immediately to fix this.
-    - RUBY_VERSION=2.5.1
-    - RUBY_VERSION=2.5.1-alpine
-    - RUBY_VERSION=2.5.0
-    - RUBY_VERSION=2.5.0-alpine
-    - RUBY_VERSION=2.4.10        ALIAS=2.4
-    - RUBY_VERSION=2.4.10-alpine ALIAS=2.4-alpine
-    - RUBY_VERSION=2.4.9
-    - RUBY_VERSION=2.4.9-alpine
-    - RUBY_VERSION=2.4.8
-    - RUBY_VERSION=2.4.8-alpine
-    - RUBY_VERSION=2.4.7
-    - RUBY_VERSION=2.4.7-alpine
-    - RUBY_VERSION=2.4.6
-    - RUBY_VERSION=2.4.6-alpine
-    - RUBY_VERSION=2.4.5
-    - RUBY_VERSION=2.4.5-alpine
-    - RUBY_VERSION=2.4.4
-    - RUBY_VERSION=2.4.4-alpine
-    - RUBY_VERSION=2.4.3
-    - RUBY_VERSION=2.4.3-alpine3.7 ALIAS=2.4.3-alpine
-    - RUBY_VERSION=2.4.2
-    - RUBY_VERSION=2.4.2-alpine3.7 ALIAS=2.4.2-alpine
-    - RUBY_VERSION=2.4.1
-    - RUBY_VERSION=2.4.1-alpine3.6 ALIAS=2.4.1-alpine
-    - RUBY_VERSION=2.4.0 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.8        ALIAS=2.3
-    - RUBY_VERSION=2.3.8-alpine ALIAS=2.3-alpine
-    - RUBY_VERSION=2.3.7
-    - RUBY_VERSION=2.3.7-alpine
-    - RUBY_VERSION=2.3.6 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.5 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.4 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.3 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.2 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.1 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
-    - RUBY_VERSION=2.3.0 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=3.0.3        ALIAS_TAGS=3.0,latest
+    - RUBY_IMAGE_TAG=3.0.3-alpine ALIAS_TAGS=3.0-alpine,alpine
+    - RUBY_IMAGE_TAG=3.0.2
+    - RUBY_IMAGE_TAG=3.0.2-alpine
+    - RUBY_IMAGE_TAG=3.0.1
+    - RUBY_IMAGE_TAG=3.0.1-alpine
+    - RUBY_IMAGE_TAG=3.0.0
+    - RUBY_IMAGE_TAG=3.0.0-alpine
+    - RUBY_IMAGE_TAG=2.7.5        ALIAS_TAGS=2.7
+    - RUBY_IMAGE_TAG=2.7.5-alpine ALIAS_TAGS=2.7-alpine
+    - RUBY_IMAGE_TAG=2.7.4
+    - RUBY_IMAGE_TAG=2.7.4-alpine
+    - RUBY_IMAGE_TAG=2.7.3
+    - RUBY_IMAGE_TAG=2.7.3-alpine
+    - RUBY_IMAGE_TAG=2.7.2
+    - RUBY_IMAGE_TAG=2.7.2-alpine
+    - RUBY_IMAGE_TAG=2.7.1
+    - RUBY_IMAGE_TAG=2.7.1-alpine
+    - RUBY_IMAGE_TAG=2.7.0
+    - RUBY_IMAGE_TAG=2.7.0-alpine
+    - RUBY_IMAGE_TAG=2.6.9        ALIAS_TAGS=2.6
+    - RUBY_IMAGE_TAG=2.6.9-alpine ALIAS_TAGS=2.6-alpine
+    - RUBY_IMAGE_TAG=2.6.8
+    - RUBY_IMAGE_TAG=2.6.8-alpine
+    - RUBY_IMAGE_TAG=2.6.7
+    - RUBY_IMAGE_TAG=2.6.7-alpine
+    - RUBY_IMAGE_TAG=2.6.6
+    - RUBY_IMAGE_TAG=2.6.6-alpine
+    - RUBY_IMAGE_TAG=2.6.5
+    - RUBY_IMAGE_TAG=2.6.5-alpine
+    - RUBY_IMAGE_TAG=2.6.4
+    - RUBY_IMAGE_TAG=2.6.4-alpine
+    - RUBY_IMAGE_TAG=2.6.3
+    - RUBY_IMAGE_TAG=2.6.3-alpine
+    - RUBY_IMAGE_TAG=2.6.2
+    - RUBY_IMAGE_TAG=2.6.2-alpine
+    - RUBY_IMAGE_TAG=2.6.1
+    - RUBY_IMAGE_TAG=2.6.1-alpine
+    - RUBY_IMAGE_TAG=2.6.0
+    - RUBY_IMAGE_TAG=2.6.0-alpine
+    - RUBY_IMAGE_TAG=2.5.9        ALIAS_TAGS=2.5
+    - RUBY_IMAGE_TAG=2.5.9-alpine ALIAS_TAGS=2.5-alpine
+    - RUBY_IMAGE_TAG=2.5.8
+    - RUBY_IMAGE_TAG=2.5.8-alpine
+    - RUBY_IMAGE_TAG=2.5.7
+    - RUBY_IMAGE_TAG=2.5.7-alpine
+    - RUBY_IMAGE_TAG=2.5.6
+    - RUBY_IMAGE_TAG=2.5.6-alpine
+    - RUBY_IMAGE_TAG=2.5.5
+    - RUBY_IMAGE_TAG=2.5.5-alpine
+    - RUBY_IMAGE_TAG=2.5.4
+    - RUBY_IMAGE_TAG=2.5.4-alpine
+    - RUBY_IMAGE_TAG=2.5.3
+    - RUBY_IMAGE_TAG=2.5.3-alpine
+    # Ruby 2.5.2 never existed: it was mis-packaged and 2.5.3 was released immediately to fix it
+    - RUBY_IMAGE_TAG=2.5.1
+    - RUBY_IMAGE_TAG=2.5.1-alpine
+    - RUBY_IMAGE_TAG=2.5.0
+    - RUBY_IMAGE_TAG=2.5.0-alpine
+    - RUBY_IMAGE_TAG=2.4.10        ALIAS_TAGS=2.4
+    - RUBY_IMAGE_TAG=2.4.10-alpine ALIAS_TAGS=2.4-alpine
+    - RUBY_IMAGE_TAG=2.4.9
+    - RUBY_IMAGE_TAG=2.4.9-alpine
+    - RUBY_IMAGE_TAG=2.4.8
+    - RUBY_IMAGE_TAG=2.4.8-alpine
+    - RUBY_IMAGE_TAG=2.4.7
+    - RUBY_IMAGE_TAG=2.4.7-alpine
+    - RUBY_IMAGE_TAG=2.4.6
+    - RUBY_IMAGE_TAG=2.4.6-alpine
+    - RUBY_IMAGE_TAG=2.4.5
+    - RUBY_IMAGE_TAG=2.4.5-alpine
+    - RUBY_IMAGE_TAG=2.4.4
+    - RUBY_IMAGE_TAG=2.4.4-alpine
+    - RUBY_IMAGE_TAG=2.4.3
+    - RUBY_IMAGE_TAG=2.4.3-alpine3.7 ALIAS_TAGS=2.4.3-alpine
+    - RUBY_IMAGE_TAG=2.4.2
+    - RUBY_IMAGE_TAG=2.4.2-alpine3.7 ALIAS_TAGS=2.4.2-alpine
+    - RUBY_IMAGE_TAG=2.4.1
+    - RUBY_IMAGE_TAG=2.4.1-alpine3.6 ALIAS_TAGS=2.4.1-alpine
+    - RUBY_IMAGE_TAG=2.4.0 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.8        ALIAS_TAGS=2.3
+    - RUBY_IMAGE_TAG=2.3.8-alpine ALIAS_TAGS=2.3-alpine
+    - RUBY_IMAGE_TAG=2.3.7
+    - RUBY_IMAGE_TAG=2.3.7-alpine
+    - RUBY_IMAGE_TAG=2.3.6 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.5 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.4 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.3 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.2 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.1 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
+    - RUBY_IMAGE_TAG=2.3.0 # No Alpine variant because Yarn is unavailable on this Alpine version (< 3.6)
