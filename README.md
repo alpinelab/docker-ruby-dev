@@ -43,6 +43,7 @@ services:
 ```
 
 > 💡 Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support [multiple Ruby versions](.travis.yml) [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
+> and experimental Alpine Linux variants (append `-alpine` to image tag 🧪).
 
 <details>
 
