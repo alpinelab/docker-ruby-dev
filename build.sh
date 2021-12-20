@@ -7,6 +7,8 @@ fi
 
 set -ev
 
+docker pull ruby:${RUBY_VERSION} # (needlessly mandatory to prevent a bug in Travis)
+
 docker build . \
   --build-arg BASE_IMAGE_TAG=${RUBY_VERSION} \
   --tag alpinelab/ruby-dev:${RUBY_VERSION} \
