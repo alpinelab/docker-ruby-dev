@@ -13,7 +13,7 @@ if [ -f package.json ]; then
       || echo "yarn check --integrity --verify-tree --silent" \
   )
   echo -n "Checking JS modules... "
-  if eval ${check_command} 2> /dev/null; then
+  if eval ${check_command} &> /dev/null; then
     echo "all good 👌"
   else
     echo "something is missing 💥"
