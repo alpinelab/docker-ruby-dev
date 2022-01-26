@@ -2,6 +2,6 @@
 
 # Remove rails server PID file, that is sometimes not properly removed at shutdown
 # as instructed in https://docs.docker.com/compose/rails/
-rm -f /app/tmp/pids/server.pid
+rm -f /app/${RELATIVE_RAILS_ROOT}/tmp/pids/server.pid
 
 exec "$@"
