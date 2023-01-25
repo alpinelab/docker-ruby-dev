@@ -1,0 +1,21 @@
+name: Docker Build
+
+on:
+  workflow_dispatch:
+
+env:
+  DOCKER_BUILDKIT: 1
+
+jobs:
+  build:
+    name: build Docker image for Ruby 2.7.6
+    runs-on: ubuntu-latest
+    env:
+      RUBY_IMAGE_TAG: 2.7.6
+    steps:
+    - name: pwd
+      run: pwd
+    - name: ls -lhF
+      run: ls -lhF
+    - name: docker build
+      run: bash build.sh
