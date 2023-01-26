@@ -1,4 +1,4 @@
-# `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Travis build](https://img.shields.io/travis/alpinelab/docker-ruby-dev.svg?style=flat-square)](https://app.travis-ci.com/alpinelab/docker-ruby-dev)
+# `alpinelab/ruby-dev` [![Docker Stars](https://img.shields.io/docker/stars/alpinelab/ruby-dev?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![Docker Pulls](https://img.shields.io/docker/pulls/alpinelab/ruby-dev.svg?style=flat-square)](https://hub.docker.com/r/alpinelab/ruby-dev/) [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/alpinelab/docker-ruby-dev/docker-build.yml?style=flat-square)](https://github.com/alpinelab/docker-ruby-dev/actions/workflows/docker-build.yml)
 
 The main goal of this project is to have a single Docker image to develop all your Ruby projects, with **all dependencies contained inside Docker** (like gems, NPM packages or even Ruby itself, that won't pollute your host environment) and without anything specific to the project in the Docker image (the **codebase is mounted directly from the host filesystem into the container**, thus you'll never have to build the image when you add a gem or change some code).
 
@@ -42,8 +42,8 @@ services:
       - config:/config
 ```
 
-> 💡 Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support [multiple Ruby versions](.travis.yml) [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
-> and experimental Alpine Linux variants (append `-alpine` to image tag 🧪).
+> 💡 Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support [multiple Ruby versions](.github/workflows/docker-build.yml) [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
+> and Alpine Linux variants (append `-alpine` to image tag).
 
 <details>
 

@@ -10,9 +10,12 @@ LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
 # as advised in https://github.com/docker-library/docs/blob/master/ruby/content.md#encoding
 ENV LANG="C.UTF-8"
 
+ARG RUBYGEMS_VERSION_ARG="" \
+    BUNDLER_VERSION_ARG=""
+
 # Define dependencies base versions
-ENV RUBYGEMS_VERSION="3.4.5" \
-    BUNDLER_VERSION="2.4.5" \
+ENV RUBYGEMS_VERSION=${RUBYGEMS_VERSION_ARG:-${RUBYGEMS_VERSION}} \
+    BUNDLER_VERSION=${BUNDLER_VERSION_ARG} \
     NODE_VERSION="16" \
     GOSU_VERSION="1.16"
 
@@ -57,24 +60,39 @@ RUN set -eux; \
       ;; \
       \
       debian|ubuntu) \
-        # Fix Jessie APT sources
-        sed -i '/jessie-updates/d' /etc/apt/sources.list; \
+        # Fix Jessie APT sources (it has been moved to http://archive.debian.org)
+        sed -i \
+          -e '/jessie[-\/]updates/d' \
+          -e 's|http://deb.debian.org/debian jessie|http://archive.debian.org/debian jessie|' \
+          /etc/apt/sources.list; \
         \
-        # Install some prerequisites
+        # Detect Debian version
         apt-get update; \
-        apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+        apt-get install --assume-yes --no-install-recommends --no-install-suggests --force-yes \
           apt-transport-https \
           lsb-release \
         ; \
         debianReleaseCodename=$(lsb_release -cs); \
         \
+        # Old Debian releases specific configurations
+        case ${debianReleaseCodename} in \
+          jessie) \
+            additionalAptFlags="--force-yes"; \
+            additionalAptPackages="libssl1.0.0"; \
+          ;; \
+          *) \
+            additionalAptFlags=""; \
+            additionalAptPackages=""; \
+          ;; \
+        esac; \
+        \
         # Fix LetsEncrypt expired CA on older Debian releases
         case ${debianReleaseCodename} in \
           jessie|buster|stretch) \
-            apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+            apt-get install --assume-yes --no-install-recommends --no-install-suggests ${additionalAptFlags} \
               ca-certificates \
               curl \
-              $([ "${debianReleaseCodename}" = "jessie" ] && echo libssl1.0.0) \
+              ${additionalAptPackages} \
             ; \
             sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf; \
             update-ca-certificates; \
@@ -84,7 +102,7 @@ RUN set -eux; \
         # Add PostgreSQL APT repository
         curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg; \
         case ${debianReleaseCodename} in \
-          jessie) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
+          jessie|stretch) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
           *) echo "deb https://apt.postgresql.org/pub/repos/apt/ ${debianReleaseCodename}-pgdg main" ;; \
         esac > /etc/apt/sources.list.d/pgdg.list; \
         \
@@ -97,7 +115,7 @@ RUN set -eux; \
         \
         # Install everything
         apt-get update; \
-        apt-get install --assume-yes --no-install-recommends --no-install-suggests \
+        apt-get install --assume-yes --no-install-recommends --no-install-suggests ${additionalAptFlags} \
           jq \
           nano \
           nodejs \
@@ -147,7 +165,7 @@ RUN set -eux; \
 # Install GEM dependencies
 # Note: we still need Bundler 1.x because Bundler auto-switches to it when it encounters a Gemfile.lock with BUNDLED WITH 1.x
 RUN gem update --system ${RUBYGEMS_VERSION} \
- && gem install bundler:${BUNDLER_VERSION} \
+ && gem install bundler${BUNDLER_VERSION:+:${BUNDLER_VERSION}} \
  && gem install bundler:1.17.3
 
 # Add dot files to the home directory skeleton (they persist IRB/Pry/Rails console history, configure Yarn, etc…)
