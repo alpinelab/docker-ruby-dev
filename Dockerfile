@@ -61,9 +61,9 @@ RUN set -eux; \
       \
       debian|ubuntu) \
         # Fix Jessie APT sources (it has been moved to http://archive.debian.org)
-        sed -i \
+        sed -i -r \
           -e '/jessie[-\/]updates/d' \
-          -e 's|http://deb.debian.org/debian jessie|http://archive.debian.org/debian jessie|' \
+          -e 's|http://(deb\|httpredir).debian.org/debian jessie|http://archive.debian.org/debian jessie|' \
           /etc/apt/sources.list; \
         \
         # Detect Debian version
