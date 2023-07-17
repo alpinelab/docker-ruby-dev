@@ -58,10 +58,10 @@ RUN set -eux; \
       ;; \
       \
       debian|ubuntu) \
-        # Fix Jessie APT sources (it has been moved to http://archive.debian.org)
+        # Fix Jessie & Stretch APT sources (they have been moved to http://archive.debian.org)
         sed -i -r \
-          -e '/jessie[-\/]updates/d' \
-          -e 's|http://(deb\|httpredir).debian.org/debian jessie|http://archive.debian.org/debian jessie|' \
+          -e '/(jessie|stretch)[-\/]updates/d' \
+          -e 's|http://(deb\|httpredir).debian.org/debian (jessie\|stretch)|http://archive.debian.org/debian \2|' \
           /etc/apt/sources.list; \
         \
         # Detect Debian version
