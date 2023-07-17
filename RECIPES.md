@@ -431,7 +431,7 @@ This can be particularly useful with configurations like the one traditionally s
 
 ### Bundler 1.x
 
-Our image uses Bundler 2.x by default, but for convenience, it also embeds Bundler 1.x. To use it in your legacy project, simply set the `BUNDLER_VERSION` environment variable from your `docker-compose.yml`:
+Our image uses Bundler 2.x by default, but for convenience, it also embeds Bundler 1.x. To use it in your legacy project, simply set the [(undocumented) `BUNDLER_VERSION` environment variable](https://github.com/rubygems/rubygems/issues/3978) from your `docker-compose.yml`:
 
 ```yaml
 services:

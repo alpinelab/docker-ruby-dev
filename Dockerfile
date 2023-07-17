@@ -14,9 +14,7 @@ ARG RUBYGEMS_VERSION_ARG="" \
     BUNDLER_VERSION_ARG=""
 
 # Define dependencies base versions
-ENV RUBYGEMS_VERSION=${RUBYGEMS_VERSION_ARG:-${RUBYGEMS_VERSION}} \
-    BUNDLER_VERSION=${BUNDLER_VERSION_ARG} \
-    NODE_VERSION="16" \
+ENV NODE_VERSION="16" \
     GOSU_VERSION="1.16"
 
 # Define some default variables
@@ -164,8 +162,8 @@ RUN set -eux; \
 
 # Install GEM dependencies
 # Note: we still need Bundler 1.x because Bundler auto-switches to it when it encounters a Gemfile.lock with BUNDLED WITH 1.x
-RUN gem update --system ${RUBYGEMS_VERSION} \
- && gem install bundler${BUNDLER_VERSION:+:${BUNDLER_VERSION}} \
+RUN gem update --system ${RUBYGEMS_VERSION_ARG} \
+ && gem install bundler${BUNDLER_VERSION_ARG:+:${BUNDLER_VERSION_ARG}} \
  && gem install bundler:1.17.3
 
 # Add dot files to the home directory skeleton (they persist IRB/Pry/Rails console history, configure Yarn, etc…)
