@@ -142,7 +142,7 @@ RUN set -eux; \
     [ "${osType}" = "alpine" ] && apk add --no-cache --virtual .gosu-deps gnupg || :; \
     \
     # Fetch author public key
-    for keyserver in $(shuf -e keys.gnupg.net ha.pool.sks-keyservers.net hkp://p80.pool.sks-keyservers.net:80 keyserver.ubuntu.com pgp.mit.edu); do \
+    for keyserver in $(shuf -e keyserver.ubuntu.com keys.openpgp.org keys.mailvelope.com); do \
       gpg --batch --no-tty --keyserver "${keyserver}" --recv-keys "B42F6819007F00F88E364FD4036A9C25BF357DD4" && break || :; \
     done; \
     \
