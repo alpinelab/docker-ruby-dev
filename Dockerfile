@@ -59,10 +59,12 @@ RUN set -eux; \
       \
       debian|ubuntu) \
         # Fix Jessie & Stretch APT sources (they have been moved to http://archive.debian.org)
-        sed -i -r \
-          -e '/(jessie|stretch)[-\/]updates/d' \
-          -e 's|http://(deb\|httpredir).debian.org/debian (jessie\|stretch)|http://archive.debian.org/debian \2|' \
-          /etc/apt/sources.list; \
+        if [ -f /etc/apt/sources.list ]; then \
+          sed -i -r \
+            -e '/(jessie|stretch)[-\/]updates/d' \
+            -e 's|http://(deb\|httpredir).debian.org/debian (jessie\|stretch)|http://archive.debian.org/debian \2|' \
+            /etc/apt/sources.list; \
+        fi; \
         \
         # Detect Debian version
         apt-get update; \
@@ -72,25 +74,13 @@ RUN set -eux; \
         ; \
         debianReleaseCodename=$(lsb_release -cs); \
         \
-        # Old Debian releases specific configurations
-        case ${debianReleaseCodename} in \
-          jessie) \
-            additionalAptFlags="--force-yes"; \
-            additionalAptPackages="libssl1.0.0"; \
-          ;; \
-          *) \
-            additionalAptFlags=""; \
-            additionalAptPackages=""; \
-          ;; \
-        esac; \
-        \
         # Fix LetsEncrypt expired CA on older Debian releases
         case ${debianReleaseCodename} in \
           jessie|buster|stretch) \
-            apt-get install --assume-yes --no-install-recommends --no-install-suggests ${additionalAptFlags} \
+            apt-get install --assume-yes --no-install-recommends --no-install-suggests --force-yes \
               ca-certificates \
               curl \
-              ${additionalAptPackages} \
+              $([ "${debianReleaseCodename}" = "jessie" ] && echo "libssl1.0.0") \
             ; \
             sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf; \
             update-ca-certificates; \
@@ -113,10 +103,11 @@ RUN set -eux; \
         \
         # Install everything
         apt-get update; \
-        apt-get install --assume-yes --no-install-recommends --no-install-suggests ${additionalAptFlags} \
+        apt-get install --assume-yes --no-install-recommends --no-install-suggests --force-yes \
           jq \
           nano \
           nodejs \
+          $([ "${debianReleaseCodename}" = "bookworm" ] && echo "npm") \
           postgresql-client \
           vim \
         ; \
