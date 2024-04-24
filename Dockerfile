@@ -14,8 +14,9 @@ ARG RUBYGEMS_VERSION_ARG="" \
     BUNDLER_VERSION_ARG=""
 
 # Define dependencies base versions
-ENV NODE_VERSION="16" \
-    GOSU_VERSION="1.16"
+# Note: NodeJS is capped to 14.x on Jessie and 16.x on Stretch (due to `libc` requirements)
+ENV NODE_VERSION="20" \
+    GOSU_VERSION="1.17"
 
 # Define some default variables
 ENV PORT="5000" \
@@ -95,11 +96,11 @@ RUN set -eux; \
         esac > /etc/apt/sources.list.d/pgdg.list; \
         \
         # Add NodeJS APT repository
-        curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.nodesource.com.gpg; \
         case ${debianReleaseCodename} in \
-          jessie) echo "deb https://deb.nodesource.com/node_14.x ${debianReleaseCodename} main" ;; \
-          *) echo "deb https://deb.nodesource.com/node_${NODE_VERSION}.x ${debianReleaseCodename} main" ;; \
-        esac > /etc/apt/sources.list.d/nodesource.list; \
+          jessie) curl -fsSL https://deb.nodesource.com/setup_14.x ;; \
+          stretch) curl -fsSL https://deb.nodesource.com/setup_16.x ;; \
+          *) curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x ;; \
+        esac | bash; \
         \
         # Install everything
         apt-get update; \
@@ -124,7 +125,7 @@ RUN set -eux; \
     esac;
 
 # Install `gosu`
-ARG TARGETARCH
+ARG TARGETARCH # provided by Docker multi-platform support: https://docs.docker.com/build/guide/multi-platform
 RUN set -eux; \
     osType="$(sed -n 's|^ID=||p' /etc/os-release)"; \
     export GNUPGHOME="$(mktemp -d)"; \
