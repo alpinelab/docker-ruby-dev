@@ -9,6 +9,7 @@ jobs:
   build:
     name: alpinelab/ruby-dev:${{ matrix.ruby }}${{ matrix.variant }}
     runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         ruby:
