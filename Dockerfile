@@ -91,7 +91,7 @@ RUN set -eux; \
         # Add PostgreSQL APT repository
         curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg; \
         case ${debianReleaseCodename} in \
-          jessie|stretch) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
+          jessie|stretch|buster) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
           *) echo "deb https://apt.postgresql.org/pub/repos/apt/ ${debianReleaseCodename}-pgdg main" ;; \
         esac > /etc/apt/sources.list.d/pgdg.list; \
         \
