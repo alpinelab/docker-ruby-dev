@@ -66,61 +66,18 @@ jobs:
           - 2.6.5
           - 2.6.4
           - 2.6.3
-          - 2.6.2
-          - 2.6.1
-          - 2.6.0
           - 2.5.9
           - 2.5.8
           - 2.5.7
           - 2.5.6
           - 2.5.5
-          - 2.5.4
-          - 2.5.3
-          # Ruby 2.5.2 never existed: it was mis-packaged and 2.5.3 was released immediately to fix it
-          - 2.5.1
-          - 2.5.0
           - 2.4.10
           - 2.4.9
           - 2.4.8
           - 2.4.7
           - 2.4.6
-          - 2.4.5
-          - 2.4.4
-          - 2.4.3
-          - 2.4.2
-          - 2.4.1
-          - 2.4.0
-          - 2.3.8
-          - 2.3.7
-          - 2.3.6
-          - 2.3.5
-          - 2.3.4
-          - 2.3.3
-          - 2.3.2
-          - 2.3.1
         variant: ["", "-alpine"]
 
-        exclude:
-          # the following needs an explicit Alpine version, so we exlude them here and re-include them with explicit version below
-          - { ruby: 2.4.3, variant: "-alpine" }
-          - { ruby: 2.4.2, variant: "-alpine" }
-          - { ruby: 2.4.1, variant: "-alpine"}
-          # the following do not have an Alpine variant because Yarn is unavailable on their base Alpine version (< 3.6)
-          - { ruby: 2.4.0, variant: "-alpine" }
-          - { ruby: 2.3.6, variant: "-alpine" }
-          - { ruby: 2.3.5, variant: "-alpine" }
-          - { ruby: 2.3.4, variant: "-alpine" }
-          - { ruby: 2.3.3, variant: "-alpine" }
-          - { ruby: 2.3.2, variant: "-alpine" }
-          - { ruby: 2.3.1, variant: "-alpine" }
-
-        include:
-          - ruby: 2.4.3
-            variant: "-alpine3.7"
-          - ruby: 2.4.2
-            variant: "-alpine3.7"
-          - ruby: 2.4.1
-            variant: "-alpine3.6"
     steps:
     -
       name: Login to Docker Hub
@@ -143,14 +100,12 @@ jobs:
           ${{ startsWith(matrix.ruby, '2.6') && 'RUBYGEMS_VERSION_ARG=3.4.22' || '' }}
           ${{ startsWith(matrix.ruby, '2.5') && 'RUBYGEMS_VERSION_ARG=3.3.26' || '' }}
           ${{ startsWith(matrix.ruby, '2.4') && 'RUBYGEMS_VERSION_ARG=3.3.26' || '' }}
-          ${{ startsWith(matrix.ruby, '2.3') && 'RUBYGEMS_VERSION_ARG=3.3.26' || '' }}
 
           ${{ startsWith(matrix.ruby, '3.0') && 'BUNDLER_VERSION_ARG=2.5.23' || '' }}
           ${{ startsWith(matrix.ruby, '2.7') && 'BUNDLER_VERSION_ARG=2.4.22' || '' }}
           ${{ startsWith(matrix.ruby, '2.6') && 'BUNDLER_VERSION_ARG=2.4.22' || '' }}
           ${{ startsWith(matrix.ruby, '2.5') && 'BUNDLER_VERSION_ARG=2.3.26' || '' }}
           ${{ startsWith(matrix.ruby, '2.4') && 'BUNDLER_VERSION_ARG=2.3.26' || '' }}
-          ${{ startsWith(matrix.ruby, '2.3') && 'BUNDLER_VERSION_ARG=2.3.26' || '' }}
 
         tags: |
           alpinelab/ruby-dev:${{ matrix.ruby }}${{ matrix.variant }}
@@ -167,11 +122,6 @@ jobs:
           ${{ matrix.ruby == '2.6.10' && format('alpinelab/ruby-dev:2.6{0}', matrix.variant) || '' }}
           ${{ matrix.ruby == '2.5.9' && format('alpinelab/ruby-dev:2.5{0}', matrix.variant) || '' }}
           ${{ matrix.ruby == '2.4.10' && format('alpinelab/ruby-dev:2.4{0}', matrix.variant) || '' }}
-          ${{ matrix.ruby == '2.3.8' && format('alpinelab/ruby-dev:2.3{0}', matrix.variant) || '' }}
-
-          ${{ (matrix.ruby == '2.4.3' && matrix.variant == '-alpine3.7') && 'alpinelab/ruby-dev:2.4.3-alpine' || '' }}
-          ${{ (matrix.ruby == '2.4.2' && matrix.variant == '-alpine3.7') && 'alpinelab/ruby-dev:2.4.2-alpine' || '' }}
-          ${{ (matrix.ruby == '2.4.3' && matrix.variant == '-alpine3.6') && 'alpinelab/ruby-dev:2.4.1-alpine' || '' }}
 
         cache-from: type=gha
         cache-to: type=gha,mode=max

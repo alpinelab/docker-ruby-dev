@@ -14,7 +14,6 @@ ARG RUBYGEMS_VERSION_ARG="" \
     BUNDLER_VERSION_ARG=""
 
 # Define dependencies base versions
-# Note: NodeJS is capped to 14.x on Jessie and 16.x on Stretch (due to `libc` requirements)
 ENV NODE_VERSION="20" \
     GOSU_VERSION="1.17"
 
@@ -41,7 +40,7 @@ RUN set -eux; \
         # Use `libpq-dev` (~20MB) rather than `postgresql-dev` (~200MB) if available
         # (the former was extracted from the latter in Alpine 3.15)
         case ${alpineMajorVersion} in \
-          3.3|3.4|3.5|3.6|3.7|3.8|3.9|3.10|3.11|3.12|3.13|3.14) libpqPackage="postgresql-dev" ;; \
+          3.10|3.11|3.12|3.13|3.14) libpqPackage="postgresql-dev" ;; \
           3.15|*) libpqPackage="libpq-dev" ;; \
         esac; \
         \
@@ -60,11 +59,10 @@ RUN set -eux; \
       ;; \
       \
       debian|ubuntu) \
-        # Fix Jessie & Stretch APT sources (they have been moved to http://archive.debian.org)
+        # Fix Buster APT sources (they have been moved to http://archive.debian.org)
         if [ -f /etc/apt/sources.list ]; then \
           sed -i -r \
-            -e '/(jessie|stretch)[-\/]updates/d' \
-            -e 's|http://(deb\|httpredir).debian.org/debian (jessie\|stretch)|http://archive.debian.org/debian \2|' \
+            -e 's|http://(deb\|httpredir).debian.org/debian (buster)|http://archive.debian.org/debian \2|' \
             /etc/apt/sources.list; \
         fi; \
         \
@@ -78,11 +76,10 @@ RUN set -eux; \
         \
         # Fix LetsEncrypt expired CA on older Debian releases
         case ${debianReleaseCodename} in \
-          jessie|buster|stretch) \
+          buster) \
             apt-get install --assume-yes --no-install-recommends --no-install-suggests --force-yes \
               ca-certificates \
               curl \
-              $([ "${debianReleaseCodename}" = "jessie" ] && echo "libssl1.0.0") \
             ; \
             sed -i 's|mozilla/DST_Root_CA_X3.crt|!mozilla/DST_Root_CA_X3.crt|g' /etc/ca-certificates.conf; \
             update-ca-certificates; \
@@ -92,16 +89,12 @@ RUN set -eux; \
         # Add PostgreSQL APT repository
         curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg; \
         case ${debianReleaseCodename} in \
-          jessie|stretch|buster) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
+          buster) echo "deb https://apt-archive.postgresql.org/pub/repos/apt ${debianReleaseCodename}-pgdg-archive main" ;; \
           *) echo "deb https://apt.postgresql.org/pub/repos/apt/ ${debianReleaseCodename}-pgdg main" ;; \
         esac > /etc/apt/sources.list.d/pgdg.list; \
         \
         # Add NodeJS APT repository
-        case ${debianReleaseCodename} in \
-          jessie) curl -fsSL https://deb.nodesource.com/setup_14.x ;; \
-          stretch) curl -fsSL https://deb.nodesource.com/setup_16.x ;; \
-          *) curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x ;; \
-        esac | bash; \
+        curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash; \
         \
         # Install everything
         apt-get update; \
