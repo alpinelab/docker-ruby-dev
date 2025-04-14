@@ -45,37 +45,6 @@ services:
 > 💡 Feel free to use `alpinelab/ruby-dev:<ruby-version>`: we support [multiple Ruby versions](.github/workflows/docker-build.yml) [as Docker tags](https://hub.docker.com/r/alpinelab/ruby-dev/tags/)
 > and Alpine Linux variants (append `-alpine` to image tag).
 
-<details>
-
-  <summary>If you're on MacOS, you'll very likely want to use Docker Sync too.</summary>
-
-  > ⚠️ Use your **actual** application name suffixed with `-sync` instead of `your_app-sync` to prevent conflicts between your projects.
-
-  0. install it with `gem install docker-sync`
-
-  1. add a `docker-sync.yml` file:
-
-      ```yaml
-      version: "3"
-      syncs:
-        your_app-sync:
-          src: ./
-          sync_excludes: [log, tmp, .git, .bundle, .idea, node_modules]
-      ```
-
-  2. add the sync container as external container in `docker-compose.yml`:
-
-      ```yaml
-      volumes:
-        your_app-sync: { external: true }
-      ```
-
-  3. use it by replacing `- ./:/app` with `- your_app-sync:/app:nocopy` in `docker-compose.yml`
-
-  4. start the sync with `docker-sync start`
-
-</details>
-
 ### Run
 
 You can now start your project with:
