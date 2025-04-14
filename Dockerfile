@@ -4,7 +4,7 @@ ARG BASE_IMAGE_TAG=latest
 
 FROM ruby:${BASE_IMAGE_TAG}
 
-LABEL maintainer "Michael Baudino <michael.baudino@alpine-lab.com>"
+LABEL org.opencontainers.image.authors="Michael Baudino <michael@baudi.no>"
 
 # Explicitely define locale
 # as advised in https://github.com/docker-library/docs/blob/master/ruby/content.md#encoding
