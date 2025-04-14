@@ -98,7 +98,6 @@ jobs:
           - 2.3.3
           - 2.3.2
           - 2.3.1
-          - 2.3.0
         variant: ["", "-alpine"]
 
         exclude:
@@ -114,7 +113,6 @@ jobs:
           - { ruby: 2.3.3, variant: "-alpine" }
           - { ruby: 2.3.2, variant: "-alpine" }
           - { ruby: 2.3.1, variant: "-alpine" }
-          - { ruby: 2.3.0, variant: "-alpine" }
 
         include:
           - ruby: 2.4.3
