@@ -140,10 +140,16 @@ jobs:
         build-args: |
           BASE_IMAGE_TAG=${{ matrix.ruby }}${{ matrix.variant }}
 
+          ${{ startsWith(matrix.ruby, '3.0') && 'RUBYGEMS_VERSION_ARG=3.5.23' || '' }}
+          ${{ startsWith(matrix.ruby, '2.7') && 'RUBYGEMS_VERSION_ARG=3.4.22' || '' }}
+          ${{ startsWith(matrix.ruby, '2.6') && 'RUBYGEMS_VERSION_ARG=3.4.22' || '' }}
           ${{ startsWith(matrix.ruby, '2.5') && 'RUBYGEMS_VERSION_ARG=3.3.26' || '' }}
           ${{ startsWith(matrix.ruby, '2.4') && 'RUBYGEMS_VERSION_ARG=3.3.26' || '' }}
           ${{ startsWith(matrix.ruby, '2.3') && 'RUBYGEMS_VERSION_ARG=3.3.26' || '' }}
 
+          ${{ startsWith(matrix.ruby, '3.0') && 'BUNDLER_VERSION_ARG=2.5.23' || '' }}
+          ${{ startsWith(matrix.ruby, '2.7') && 'BUNDLER_VERSION_ARG=2.4.22' || '' }}
+          ${{ startsWith(matrix.ruby, '2.6') && 'BUNDLER_VERSION_ARG=2.4.22' || '' }}
           ${{ startsWith(matrix.ruby, '2.5') && 'BUNDLER_VERSION_ARG=2.3.26' || '' }}
           ${{ startsWith(matrix.ruby, '2.4') && 'BUNDLER_VERSION_ARG=2.3.26' || '' }}
           ${{ startsWith(matrix.ruby, '2.3') && 'BUNDLER_VERSION_ARG=2.3.26' || '' }}
