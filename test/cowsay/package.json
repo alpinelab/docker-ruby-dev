@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "cowsay": "~1.2"
-  },
-  "license": "MIT"
-}
