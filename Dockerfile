@@ -109,7 +109,6 @@ RUN set -eux; \
           jq \
           nano \
           nodejs \
-          $([ "${debianReleaseCodename}" = "bookworm" ] && echo "npm") \
           postgresql-client \
           vim \
         ; \
