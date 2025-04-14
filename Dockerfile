@@ -47,6 +47,7 @@ RUN set -eux; \
         \
         apk add --no-cache \
           alpine-sdk \
+          curl \
           openssh \
           jq \
           nano \
