@@ -47,7 +47,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 3. Install Rails and generate your Rails application (it replaces the usual `gem install rails && rails new my_project` command that you will find in every documentation and tutorial out there):
 
     ```shell
-    docker-compose run app bash -c "bundle init && bundle add rails && rails new . --force --skip-spring"
+    docker compose run app bash -c "bundle init && bundle add rails && rails new . --force --skip-spring"
     ```
 
     > 💡 You can specify the Rails version you want by appending the [`--version` switch](https://bundler.io/v1.16/man/bundle-add.1.html#OPTIONS) to the `bundle add rails` command (_e.g._ `--version "~> 5.2.0"`).
@@ -64,7 +64,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 
     > ⚠️ Whatever you do in this `Procfile`, always configure your servers to listen on `0.0.0.0` (`puma` [does it](https://github.com/puma/puma/blob/8dbc6eb6ed96b2cefa7092dd398ea2c0a4a0be80/lib/puma/configuration.rb#L10) by default but using `rails server` [forces it](https://github.com/rails/rails/blob/b10f371366a606310cab26648d798836e030bdc8/railties/lib/rails/commands/server/server_command.rb#L236) to listen to `localhost`, unless you override it again using the `-b|--binding` switch like above). Without it, you won't be able to connect to this server from outside the running container.
 
-5. Run `docker-compose up app` as usual and you're [good to profit 🎉](http://localhost:5000).
+5. Run `docker compose up app` as usual and you're [good to profit 🎉](http://localhost:5000).
 
 ### Creating a gem from scratch
 
@@ -93,7 +93,7 @@ Please refer to [README.md](README.md) for generic overview, setup and usage ins
 3. Generate your gem skeleton (it just needs to trick `bundler` to think that the current directory is available as a subdirectory named `my_project`):
 
     ```shell
-    docker-compose run app bash -c "ln -s . my_project && bundle gem my_project && rm my_project"
+    docker compose run app bash -c "ln -s . my_project && bundle gem my_project && rm my_project"
     ```
 
 ### Using Webpacker
@@ -271,7 +271,7 @@ Here is what it does:
         - postgres
     ```
 
-You can now start PGAdmin using the usual command `docker-compose up pgadmin` then access it on http://localhost:5050 🐘 (from where you can configure it to connect to the PostgreSQL server on host `postgres` with user `postgres` and no password).
+You can now start PGAdmin using the usual command `docker compose up pgadmin` then access it on http://localhost:5050 🐘 (from where you can configure it to connect to the PostgreSQL server on host `postgres` with user `postgres` and no password).
 
 ### Using MailCatcher
 
@@ -329,7 +329,7 @@ Your application will now send all emails to MailCatcher SMTP server and you can
 
 ## Configuration
 
-Most configurations can be done from a `docker-compose.override.yml` file alongside your `docker-compose.yml` file (by default, it will be [automatically read](https://docs.docker.com/compose/extends/#multiple-compose-files) by `docker-compose`, and it should probably be [gitignore'd globally](https://help.github.com/articles/ignoring-files/#create-a-global-gitignore)).
+Most configurations can be done from a `docker-compose.override.yml` file alongside your `docker-compose.yml` file (by default, it will be [automatically read](https://docs.docker.com/compose/extends/#multiple-compose-files) by `docker compose`, and it should probably be [gitignore'd globally](https://help.github.com/articles/ignoring-files/#create-a-global-gitignore)).
 
 ### Heroku CLI authentication
 
@@ -447,8 +447,8 @@ services:
 First of all, make sure your development database exists and is empty:
 
 ```shell
-docker-compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=postgres app dropdb app_development
-docker-compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=postgres app createdb app_development
+docker compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=postgres app dropdb app_development
+docker compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=postgres app createdb app_development
 ```
 
 ### Load a database dump
@@ -456,7 +456,7 @@ docker-compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=p
 To copy a database dump (_e.g._ `latest.dump`) to your local Postgres development database, use [`pg_restore`](https://www.postgresql.org/docs/current/app-pgrestore.html):
 
 ```shell
-docker-compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=postgres app pg_restore --verbose --clean --no-acl --no-owner -d app_development latest.dump
+docker compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=postgres app pg_restore --verbose --clean --no-acl --no-owner -d app_development latest.dump
 ```
 
 ### Fetch and load a Heroku database
@@ -464,7 +464,7 @@ docker-compose run -e DISABLE_AUTO_INSTALL_DEPS=1 -e PGHOST=postgres -e PGUSER=p
 To copy a Postgres database from Heroku to your local development environment (assuming you followed the Postgres config from the [using PostgreSQL](#using-postgresql) section), use [`heroku pg:pull`](https://devcenter.heroku.com/articles/heroku-cli-commands#heroku-pg-pull-source-target):
 
 ```shell
-docker-compose run -e PGSSLMODE=prefer -e DISABLE_AUTO_INSTALL_DEPS=1 app heroku pg:pull DATABASE_URL postgres://postgres:password@postgres/app_development -a your-heroku-app
+docker compose run -e PGSSLMODE=prefer -e DISABLE_AUTO_INSTALL_DEPS=1 app heroku pg:pull DATABASE_URL postgres://postgres:password@postgres/app_development -a your-heroku-app
 ```
 
 > ℹ️ You need [Heroku CLI authentication](#heroku-cli-authentication) configured for this to work.

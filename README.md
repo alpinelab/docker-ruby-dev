@@ -4,7 +4,7 @@ The main goal of this project is to have a single Docker image to develop all yo
 
 The Docker container also provides developer-friendly tools and behaviours like persisted **Ruby console history** (IRB and Pry), **shell history**, or even auto-installing dependencies (that's right:  simply change your `Gemfile` or `package.json` and **`bundle install` or `yarn install` will be run automatically** for you and only when necessary). It also provides a few CLI tools to get your hands dirty, but as least as possible: `vim`, `nano`, `heroku`.
 
-The default command (when you just `docker-compose up`) is to run `foreman start`, thus starting whatever you put in your `Procfile` (except the `release` process, if you have one: it's a reserved process name by Heroku/Dokku). All commands are run inside the container **as the same user that owns your codebase** (thus probably your host user), which means that any file generated inside the container (think of `rails generate`, `yarn init`, or even log files) will be owned by yourself (not by `root`, like they would with a default Docker configuration).
+The default command (when you just `docker compose up`) is to run `foreman start`, thus starting whatever you put in your `Procfile` (except the `release` process, if you have one: it's a reserved process name by Heroku/Dokku). All commands are run inside the container **as the same user that owns your codebase** (thus probably your host user), which means that any file generated inside the container (think of `rails generate`, `yarn init`, or even log files) will be owned by yourself (not by `root`, like they would with a default Docker configuration).
 
 We try to use sane default conventions so you don't have to think about it, but this image also allows some configuration (_e.g._ Heroku CLI or Git authentication) and [customisation](#customisation) (install extra software inside the container). See the [recipes book](RECIPES.md) for more details.
 
@@ -50,13 +50,13 @@ services:
 You can now start your project with:
 
 ```shell
-docker-compose up
+docker compose up
 ```
 
 Or run any command (like `rake`, `bash`, or whatever else) with:
 
 ```shell
-docker-compose run app [rake|bash|...]
+docker compose run app [rake|bash|...]
 ```
 
 > 💡 Note that you don't need to prefix commands with `bundle exec`.
@@ -64,7 +64,7 @@ docker-compose run app [rake|bash|...]
 You can even bypass dependencies check/auto-install before the command is run by setting the `DISABLE_AUTO_INSTALL_DEPS` environment variable from the command-line:
 
 ```shell
-docker-compose run -e DISABLE_AUTO_INSTALL_DEPS=1 app bash
+docker compose run -e DISABLE_AUTO_INSTALL_DEPS=1 app bash
 ```
 
 ## Customisation
@@ -101,7 +101,7 @@ You can customise this image by **building your own image based on this one** (o
 > 1. Run a shell as root in the container (notice the empty entrypoint):
 >
 >     ```shell
->     docker-compose run --entrypoint= app bash
+>     docker compose run --entrypoint= app bash
 >     ```
 >
 > 2. Install the pakckage using APT (any change will be undone when you close the shell):
